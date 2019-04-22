@@ -1,0 +1,69 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Add Book</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="/resources/demos/style.css">
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<script>
+		$( document ).ready(function() {
+			$(".datepicker").datepicker({
+				format: 'dd/mm/yyyy'
+			});
+		});
+  	</script>
+
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1> Add Books </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<a class="btn btn-info" href="#" th:href="@{/books/all}"> Back to All Books </a>
+			<form action="#" class="form-horizontal"
+				  th:action="@{/books/save}"
+				  th:object="${form}"
+				  method="post">
+				<fieldset>
+					<span class="pull-right">
+						    <input type="submit" id="submitButton" class="btn btn-success" th:value="Save">
+						    <input type="reset" id="resetButton" class="btn btn-danger" th:value="Reset"/>
+					</span>
+					<table class="table">
+						<thead>
+						<tr>
+							<th> Title</th>
+							<th> Author</th>
+							<th> Date</th>
+							<th> Public </th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr th:each="book, itemStat : *{books}">
+							<td><input th:placeholder="Title + ' ' + ${itemStat.count}"
+									   th:field="*{books[__${itemStat.index}__].title}" required/></td>
+							<td><input th:placeholder="Author + ' ' + ${itemStat.count}"
+									   th:field="*{books[__${itemStat.index}__].author}" required/></td>
+							<td><input class="datepicker"
+									   th:placeholder="Date + ' ' + ${itemStat.count}"
+									   th:field="*{books[__${itemStat.index}__].date}" required/></td>
+							<td><input type="checkbox"
+									   th:field="*{books[__${itemStat.index}__].pub}" /></td>
+						</tr>
+						</tbody>
+
+					</table>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>

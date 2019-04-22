@@ -1,0 +1,47 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>All Books</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1> Books </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<table class="table">
+				<thead>
+					<tr>
+						<th> Title </th>
+						<th> Author </th>
+						<th> Date </th>
+						<th> Public </th>
+						<th> Action </th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${books.empty}">
+						<td colspan="2"> No Books Available </td>
+					</tr>
+					<tr th:each="book : ${books}">
+						<td><span th:text="${book.title}"> Title </span></td>
+						<td><span th:text="${book.author}"> Author </span></td>
+						<td><span th:text="${#dates.format(book.date, 'dd/mm/yyyy')}"> Date </span></td>
+						<td><span th:text="${book.pub}"> Public </span></td>
+						<td><span><a class="btn btn-link" href="#" th:href="'/books/remove?id=' + ${book.id}"> remove </a></span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-6">
+			<a class="btn btn-success" href="#" th:href="@{/books/create}"> Add Book </a>
+			<a class="btn btn-primary" href="#" th:href="@{/books/edit}" th:classappend="${books.empty} ? 'disabled' : ''"> Edit Books </a>
+		</div>
+	</div>
+</div>
+</body>
+</html>
