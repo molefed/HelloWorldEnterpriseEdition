@@ -1,23 +1,34 @@
-package ru.molefed.hw.books;
+package ru.molefed.hw.db.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.molefed.hw.books.CatalogType;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
-public class Book {
-
-    private long id;
+@Entity
+@Table(name = "Book")
+public class BookEntity {
+    @Id
+    @Column(name="id")
+    private Long id;
+    @Column(name="title")
     private String title;
+    @Column(name="author")
     private String author;
+    @Column(name="date")
     private Date date;
     private CatalogType catalogType = CatalogType.OPEN;
     private boolean pub = true;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -1,29 +1,31 @@
 package ru.molefed.hw.books;
 
+import ru.molefed.hw.db.entity.BookEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BooksCreationDto {
 
-    private List<Book> books;
+    private List<BookEntity> bookEntities;
 
     public BooksCreationDto() {
-        this.books = new ArrayList<>();
+        this.bookEntities = new ArrayList<>();
     }
 
-    public BooksCreationDto(List<Book> books) {
-        this.books = books;
+    public BooksCreationDto(List<BookEntity> bookEntities) {
+        this.bookEntities = bookEntities;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public List<BookEntity> getBookEntities() {
+        return bookEntities;
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
+    public void setBookEntities(List<BookEntity> bookEntities) {
+        this.bookEntities = bookEntities;
     }
 
-    public void addBook(Book book) {
-        this.books.add(book);
+    public void addBook(BookEntity bookEntity) {
+        this.bookEntities.add(bookEntity);
     }
 }

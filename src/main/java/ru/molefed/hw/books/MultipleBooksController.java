@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.molefed.hw.db.entity.BookEntity;
+import ru.molefed.hw.db.repo.BookRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +14,17 @@ import java.util.List;
 @RequestMapping("/books")
 public class MultipleBooksController {
 
+//    @Autowired
+//    private BookService bookService;
+
     @Autowired
-    private BookService bookService;
+    private BookRepository bookRepository;
 
     @GetMapping(value = "/all")
     public String showAll(Model model) {
-        model.addAttribute("books", bookService.findAll());
+//        model.addAttribute("books", bookService.findAll());
+
+        model.addAttribute("books", bookRepository.findAll());
 
         return "allBooks";
     }
@@ -26,7 +33,7 @@ public class MultipleBooksController {
     public String showCreateForm(Model model) {
         BooksCreationDto booksForm = new BooksCreationDto();
 
-        booksForm.addBook(new Book());
+        booksForm.addBook(new BookEntity());
 
         model.addAttribute("form", booksForm);
 
@@ -35,21 +42,27 @@ public class MultipleBooksController {
 
     @GetMapping(value = "/edit")
     public String showEditForm(Model model) {
-        List<Book> books = new ArrayList<>();
-        bookService.findAll()
-            .iterator()
-            .forEachRemaining(books::add);
+        List<BookEntity> bookEntities = new ArrayList<>();
+//        bookService.findAll()
+//            .iterator()
+//            .forEachRemaining(bookEntities::add);
 
-        model.addAttribute("form", new BooksCreationDto(books));
+        bookRepository.findAll()
+                .iterator()
+                .forEachRemaining(bookEntities::add);
+
+        model.addAttribute("form", new BooksCreationDto(bookEntities));
 
         return "editBooksForm";
     }
 
     @PostMapping(value = "/save")
     public String saveBooks(@ModelAttribute BooksCreationDto form, Model model) {
-        bookService.saveAll(form.getBooks());
+//        bookService.saveAll(form.getBookEntities());
+//        model.addAttribute("books", bookService.findAll());
 
-        model.addAttribute("books", bookService.findAll());
+        bookRepository.saveAll(form.getBookEntities());
+        model.addAttribute("books", bookRepository.findAll());
 
         return "redirect:/books/all";
     }
@@ -57,9 +70,11 @@ public class MultipleBooksController {
     @GetMapping("/remove")
     public String remove(@RequestParam(name="id", required=true) Long id, Model model) {
 
-        bookService.remove(id);
+//        bookService.remove(id);
+//        model.addAttribute("books", bookService.findAll());
 
-        model.addAttribute("books", bookService.findAll());
+        bookRepository.deleteById(id);
+        model.addAttribute("books", bookRepository.findAll());
 
         return "redirect:/books/all";
     }
