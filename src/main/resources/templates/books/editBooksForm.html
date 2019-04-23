@@ -27,9 +27,9 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<a class="btn btn-info" href="#" th:href="@{/bookEntities/all}"> Back to All Books </a>
+			<a class="btn btn-info" href="#" th:href="@{/books/all}"> Back to All Books </a>
 			<form action="#" class="form-horizontal"
-				  th:action="@{/bookEntities/save}"
+				  th:action="@{/books/save}"
 				  th:object="${form}"
 				  method="post">
 				<fieldset>
@@ -47,15 +47,15 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr th:each="bookEntity, itemStat : ${form.bookEntities}">
-							<td><input hidden th:name="|bookEntities[${itemStat.index}].id|" th:value="${bookEntity.getId()}"/></td>
-							<td><input th:placeholder="Title + ' ' + ${itemStat.count}" th:name="|bookEntities[${itemStat.index}].title|" th:value="${bookEntity.getTitle()}"
+						<tr th:each="book, itemStat : ${form.books}">
+							<td><input hidden th:name="|books[${itemStat.index}].id|" th:value="${book.getId()}"/></td>
+							<td><input th:placeholder="Title + ' ' + ${itemStat.count}" th:name="|books[${itemStat.index}].title|" th:value="${book.getTitle()}"
 									   required/></td>
-							<td><input th:placeholder="Author + ' ' + ${itemStat.count}" th:name="|bookEntities[${itemStat.index}].author|"
-									   th:value="${bookEntity.getAuthor()}" required/></td>
+							<td><input th:placeholder="Author + ' ' + ${itemStat.count}" th:name="|books[${itemStat.index}].author|"
+									   th:value="${book.getAuthor()}" required/></td>
 							<td><input class="datepicker" th:placeholder="Date + ' ' + ${itemStat.count}"
-									   th:name="|bookEntities[${itemStat.index}].date|"
-									   th:value="${#dates.format(bookEntity.getDate(), 'dd/mm/yyyy')}" required/></td>
+									   th:name="|books[${itemStat.index}].date|"
+									   th:value="${#dates.format(book.getDate(), 'dd/mm/yyyy')}" required/></td>
 						</tr>
 
 						</tbody>

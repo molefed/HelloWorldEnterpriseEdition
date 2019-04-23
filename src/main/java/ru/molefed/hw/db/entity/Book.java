@@ -1,18 +1,17 @@
 package ru.molefed.hw.db.entity;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.molefed.hw.books.CatalogType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "Book")
-public class BookEntity {
+public class Book {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
     @Column(name="title")
@@ -23,6 +22,16 @@ public class BookEntity {
     private Date date;
     private CatalogType catalogType = CatalogType.OPEN;
     private boolean pub = true;
+    @Column(name="deleted")
+    private boolean deleted;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public Long getId() {
         return id;

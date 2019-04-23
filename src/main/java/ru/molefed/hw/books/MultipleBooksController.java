@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.molefed.hw.db.entity.BookEntity;
+import ru.molefed.hw.db.entity.Book;
 import ru.molefed.hw.db.repo.BookRepository;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class MultipleBooksController {
     public String showCreateForm(Model model) {
         BooksCreationDto booksForm = new BooksCreationDto();
 
-        booksForm.addBook(new BookEntity());
+        booksForm.addBook(new Book());
 
         model.addAttribute("form", booksForm);
 
@@ -42,7 +42,7 @@ public class MultipleBooksController {
 
     @GetMapping(value = "/edit")
     public String showEditForm(Model model) {
-        List<BookEntity> bookEntities = new ArrayList<>();
+        List<Book> bookEntities = new ArrayList<>();
 //        bookService.findAll()
 //            .iterator()
 //            .forEachRemaining(bookEntities::add);
@@ -61,7 +61,7 @@ public class MultipleBooksController {
 //        bookService.saveAll(form.getBookEntities());
 //        model.addAttribute("books", bookService.findAll());
 
-        bookRepository.saveAll(form.getBookEntities());
+        bookRepository.saveAll(form.getBooks());
         model.addAttribute("books", bookRepository.findAll());
 
         return "redirect:/books/all";

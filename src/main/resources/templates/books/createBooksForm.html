@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Add Book</title>
+	<title>Add Books</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -26,9 +26,9 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<a class="btn btn-info" href="#" th:href="@{/bookEntities/all}"> Back to All Books </a>
+			<a class="btn btn-info" href="#" th:href="@{/books/all}"> Back to All Books </a>
 			<form action="#" class="form-horizontal"
-				  th:action="@{/bookEntities/save}"
+				  th:action="@{/books/save}"
 				  th:object="${form}"
 				  method="post">
 				<fieldset>
@@ -46,16 +46,16 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr th:each="bookEntity, itemStat : *{bookEntities}">
+						<tr th:each="book, itemStat : *{books}">
 							<td><input th:placeholder="Title + ' ' + ${itemStat.count}"
-									   th:field="*{bookEntities[__${itemStat.index}__].title}" required/></td>
+									   th:field="*{books[__${itemStat.index}__].title}" required/></td>
 							<td><input th:placeholder="Author + ' ' + ${itemStat.count}"
-									   th:field="*{bookEntities[__${itemStat.index}__].author}" required/></td>
+									   th:field="*{books[__${itemStat.index}__].author}" required/></td>
 							<td><input class="datepicker"
 									   th:placeholder="Date + ' ' + ${itemStat.count}"
-									   th:field="*{bookEntities[__${itemStat.index}__].date}" required/></td>
+									   th:field="*{books[__${itemStat.index}__].date}" required/></td>
 							<td><input type="checkbox"
-									   th:field="*{bookEntities[__${itemStat.index}__].pub}" /></td>
+									   th:field="*{books[__${itemStat.index}__].pub}" /></td>
 						</tr>
 						</tbody>
 

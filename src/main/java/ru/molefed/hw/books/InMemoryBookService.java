@@ -1,7 +1,7 @@
 package ru.molefed.hw.books;
 
 import org.springframework.stereotype.Service;
-import ru.molefed.hw.db.entity.BookEntity;
+import ru.molefed.hw.db.entity.Book;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -10,11 +10,11 @@ import java.util.concurrent.atomic.AtomicLong;
 public class InMemoryBookService implements BookService {
     private AtomicLong idGenerator = new AtomicLong(1);
 
-    private static Map<Long, BookEntity> booksDB = new HashMap<>();
+    private static Map<Long, Book> booksDB = new HashMap<>();
 
     static
     {
-        BookEntity b = new BookEntity();
+        Book b = new Book();
         b.setId(1L);
         b.setAuthor("Толстой");
         b.setTitle("Война и мир");
@@ -24,15 +24,15 @@ public class InMemoryBookService implements BookService {
     }
 
     @Override
-    public List<BookEntity> findAll() {
+    public List<Book> findAll() {
         return Collections.unmodifiableList(new ArrayList<>(booksDB.values()));
     }
 
     @Override
-    public void saveAll(List<BookEntity> bookEntities) {
+    public void saveAll(List<Book> bookEntities) {
         long nextId = getNextId();
-        Map<Long, BookEntity> bookMap = new HashMap<>();
-        for (BookEntity bookEntity : bookEntities) {
+        Map<Long, Book> bookMap = new HashMap<>();
+        for (Book bookEntity : bookEntities) {
             if (bookEntity.getId() == 0) {
                 bookEntity.setId(nextId++);
             }
