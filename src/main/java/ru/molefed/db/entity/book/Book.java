@@ -1,45 +1,27 @@
-package ru.molefed.hw.db.entity;
+package ru.molefed.db.entity.book;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.molefed.hw.books.CatalogType;
+import ru.molefed.db.entity.AEntityFakeDeletedWithId;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "Book")
-public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Long id;
-    @Column(name="title")
+public class Book extends AEntityFakeDeletedWithId {
+    @Column(name="title", length=128, nullable = false)
     private String title;
-    @Column(name="author")
-    private String author;
+    @OneToOne(cascade = {CascadeType.ALL}) // разобраться почему сохранение без этого не пашет
+    @JoinColumn(name="author_id", nullable=false)
+    private Author author;
     @Column(name="date")
     private Date date;
+    @Column(name="price", scale = 18, precision = 4)
+    private Double price;
+    @Column(name="catalogType")
+    @Enumerated(EnumType.ORDINAL)
     private CatalogType catalogType = CatalogType.OPEN;
     private boolean pub = true;
-    @Column(name="deleted")
-    private boolean deleted;
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -49,11 +31,11 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 
@@ -67,11 +49,11 @@ public class Book {
         this.date = date;
     }
 
-    private CatalogType getCatalogType() {
+    public CatalogType getCatalogType() {
         return catalogType;
     }
 
-    private void setCatalogType(CatalogType catalogType) {
+    public void setCatalogType(CatalogType catalogType) {
         this.catalogType = catalogType;
     }
 
@@ -82,6 +64,14 @@ public class Book {
     public void setPub(boolean pub) {
         this.pub = pub;
         setCatalogType(pub ? CatalogType.OPEN : CatalogType.CLOSE);
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
 }

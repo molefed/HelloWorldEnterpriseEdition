@@ -1,9 +1,6 @@
-package ru.molefed.hw.db;
+package ru.molefed.db;
 
-import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -11,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -24,10 +20,10 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories(
 		entityManagerFactoryRef = "entityManagerFactory",
-		basePackages = { "ru.molefed.hw.db.repo" }
+		basePackages = { "ru.molefed.db.repo" }
 )
-public class MySQLApp
-{
+public class DBApp {
+
 	@Primary
 	@Bean(name = "dataSource")
 	@ConfigurationProperties(prefix = "spring.datasource")
@@ -45,7 +41,7 @@ public class MySQLApp
 	{
 		return builder
 				.dataSource(dataSource)
-				.packages("ru.molefed.hw")
+				.packages("ru.molefed")
 				.persistenceUnit("db")
 				.build();
 	}
