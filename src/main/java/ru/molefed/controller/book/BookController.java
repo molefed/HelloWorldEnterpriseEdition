@@ -37,6 +37,7 @@ public class BookController {
     @PostMapping(value = "/save")
     public Book saveBooks(@RequestBody final Book resource) {
         Author author = authorRepository.findById(resource.getAuthor().getId()).get();
+
         resource.setAuthor(author);
         Book book = bookRepository.save(resource);
 
