@@ -13,6 +13,7 @@ import ru.molefed.db.entity.book.Author;
 import ru.molefed.db.entity.book.Book;
 import ru.molefed.db.repo.book.AuthorRepository;
 import ru.molefed.db.repo.book.BookRepository;
+import ru.molefed.service.BookService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,31 +23,21 @@ import java.util.List;
 public class BookController {
 
     @Autowired
-    private BookRepository bookRepository;
-    @Autowired
-    private AuthorRepository authorRepository;
+    private BookService bookService;
 
-    @GetMapping(value = "/all", params = { "page", "size" }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/all", params = {"page", "size"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Book> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
-
-        List<Book> result = bookRepository.findByDeleted(false, PageRequest.of(page, size, Sort.Direction.ASC, "id"));
-
-        return result;
+        return bookService.getAll(page, size);
     }
 
     @PostMapping(value = "/save")
-    public Book saveBooks(@RequestBody final Book resource) {
-        Author author = authorRepository.findById(resource.getAuthor().getId()).get();
-
-        resource.setAuthor(author);
-        Book book = bookRepository.save(resource);
-
-        return book;
+    public Book saveBooks(@RequestBody Book resource) {
+        return bookService.saveBooks(resource);
     }
 
     @GetMapping("/delete/{id}")
     public void delete(@PathVariable long id) {
-        bookRepository.deleteById(id);
+        bookService.delete(id);
     }
 
 

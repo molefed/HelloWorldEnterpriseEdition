@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 		entityManagerFactoryRef = "entityManagerFactory",
 		basePackages = { "ru.molefed.db.repo" }
 )
-public class DBApp {
+public class DBConfig {
 
 	@Primary
 	@Bean(name = "dataSource")
