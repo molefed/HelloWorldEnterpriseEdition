@@ -1,4 +1,4 @@
-package ru.molefed.controller.book;
+package ru.molefed.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +13,7 @@ import ru.molefed.db.entity.book.Author;
 import ru.molefed.db.entity.book.Book;
 import ru.molefed.db.repo.book.AuthorRepository;
 import ru.molefed.db.repo.book.BookRepository;
+import ru.molefed.dto.BookDto;
 import ru.molefed.service.BookService;
 
 import java.util.ArrayList;
@@ -26,13 +27,13 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping(value = "/all", params = {"page", "size"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Book> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public List<BookDto> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
         return bookService.getAll(page, size);
     }
 
     @PostMapping(value = "/save")
-    public Book saveBooks(@RequestBody Book resource) {
-        return bookService.saveBooks(resource);
+    public BookDto saveBooks(@RequestBody BookDto bookDto) {
+        return bookService.saveBooks(bookDto);
     }
 
     @GetMapping("/delete/{id}")

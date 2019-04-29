@@ -3,11 +3,19 @@ package ru.molefed.db.entity;
 import javax.persistence.*;
 
 @MappedSuperclass
-public abstract class AEntityWithId implements EntityWithId {
+public class AEntityWithId implements EntityWithId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", length=20, unique = true, nullable = false)
+    @Column(name = "id", length = 20, unique = true, nullable = false)
     protected Long id;
+
+    public AEntityWithId() {
+
+    }
+
+    public AEntityWithId(Long id) {
+        setId(id);
+    }
 
     @Override
     public Long getId() {
@@ -25,7 +33,7 @@ public abstract class AEntityWithId implements EntityWithId {
     }
 
     @Override
-    public boolean equals(Object that)  {
+    public boolean equals(Object that) {
         if (getId() == null || that == null || !(that instanceof EntityWithId))
             return super.equals(that);
 

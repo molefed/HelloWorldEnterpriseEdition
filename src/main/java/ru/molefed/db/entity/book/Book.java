@@ -21,7 +21,6 @@ public class Book extends AEntityFakeDeletedWithId {
     @Column(name="catalogType")
     @Enumerated(EnumType.ORDINAL)
     private CatalogType catalogType = CatalogType.OPEN;
-    private boolean pub = true;
 
     public String getTitle() {
         return title;
@@ -55,15 +54,6 @@ public class Book extends AEntityFakeDeletedWithId {
 
     public void setCatalogType(CatalogType catalogType) {
         this.catalogType = catalogType;
-    }
-
-    public boolean getPub() {
-        return !CatalogType.CLOSE.equals(getCatalogType());
-    }
-
-    public void setPub(boolean pub) {
-        this.pub = pub;
-        setCatalogType(pub ? CatalogType.OPEN : CatalogType.CLOSE);
     }
 
     public Double getPrice() {
