@@ -5,7 +5,9 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class AEntityWithNameAndId extends AEntityWithId implements EntityWithNameAndId {
-    @Column(name="name", length=128, nullable = false)
+    public static final String NAME = "name";
+
+    @Column(name = NAME, length = 128, nullable = false)
     protected String name;
 
     protected AEntityWithNameAndId() {

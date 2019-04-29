@@ -1,6 +1,8 @@
 package ru.molefed.db.repo;
 
-public interface EntityWithNameAndIdRepository<T> extends EntityWithIdRepository<T> {
+import ru.molefed.db.entity.EntityWithId;
+
+public interface EntityWithNameAndIdRepository<T extends EntityWithId> extends EntityWithIdRepository<T> {
 
     T findByName(String name);
 

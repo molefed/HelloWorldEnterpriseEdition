@@ -1,6 +1,6 @@
 package ru.molefed.db.entity;
 
-public interface EntityFakeDeletedWithId {
+public interface EntityFakeDeletedWithId extends EntityWithId {
 
     boolean isDeleted();
 

@@ -4,8 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class AEntityFakeDeletedWithId extends AEntityWithId implements EntityFakeDeletedWithId {
-
+public abstract class AEntityFakeDeletedWithNameAndId extends AEntityWithNameAndId implements EntityFakeDeletedWithNameAndId {
     @Column(name="deleted", nullable = false)
     private boolean deleted = false;
 

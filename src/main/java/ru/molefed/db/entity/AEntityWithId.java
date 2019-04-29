@@ -4,9 +4,11 @@ import javax.persistence.*;
 
 @MappedSuperclass
 public class AEntityWithId implements EntityWithId {
+    public static final String ID = "id";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", length = 20, unique = true, nullable = false)
+    @Column(name = AEntityWithId.ID, length = 20, unique = true, nullable = false)
     protected Long id;
 
     public AEntityWithId() {

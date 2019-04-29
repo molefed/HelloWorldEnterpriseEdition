@@ -35,7 +35,7 @@ public class Book extends AEntityFakeDeletedWithId {
     }
 
     public void setAuthor(Author author) {
-        this.author = author;
+        this.author = author; // возможно стоит добавлять еще и в сет книжек у автора
     }
 
     @DateTimeFormat(pattern="dd/mm/yyyy")

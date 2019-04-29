@@ -1,6 +1,6 @@
 package ru.molefed.db.entity;
 
-public interface EntityWithNameAndId {
+public interface EntityWithNameAndId extends EntityWithId {
 
     String getName();
 
