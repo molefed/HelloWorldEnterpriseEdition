@@ -9,9 +9,9 @@ import javax.persistence.UniqueConstraint;
 import java.util.Set;
 
 @Entity
-@Table(name = "AppRole",
+@Table(name = "AppRole"/*,
         uniqueConstraints = {
-                @UniqueConstraint(name = "AppRoleNameUK", columnNames = AEntityWithNameAndId.NAME) })
+                @UniqueConstraint(name = "AppRoleNameUK", columnNames = AEntityWithNameAndId.NAME) }*/)
 public class AppRole extends AEntityWithNameAndId {
 
     @OneToMany(mappedBy = "roles")

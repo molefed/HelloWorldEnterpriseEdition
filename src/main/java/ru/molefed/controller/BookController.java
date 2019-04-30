@@ -1,22 +1,13 @@
 package ru.molefed.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import ru.molefed.db.entity.book.Author;
-import ru.molefed.db.entity.book.Book;
-import ru.molefed.db.repo.book.AuthorRepository;
-import ru.molefed.db.repo.book.BookRepository;
+import ru.molefed.Roles;
 import ru.molefed.dto.BookDto;
 import ru.molefed.service.BookService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,16 +17,19 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @Secured(Roles.USER)
     @GetMapping(value = "/all", params = {"page", "size"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<BookDto> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
         return bookService.getAll(page, size);
     }
 
+    @Secured(Roles.USER)
     @PostMapping(value = "/save")
     public BookDto saveBooks(@RequestBody BookDto bookDto) {
         return bookService.saveBooks(bookDto);
     }
 
+    @Secured(Roles.USER)
     @GetMapping("/delete/{id}")
     public void delete(@PathVariable long id) {
         bookService.delete(id);

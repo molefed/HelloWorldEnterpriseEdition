@@ -1,20 +1,19 @@
 package ru.molefed.controller;
 
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Commit;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.BookApplication;
+import ru.molefed.Roles;
 import ru.molefed.db.entity.AEntityWithId;
 import ru.molefed.db.entity.book.Author;
 import ru.molefed.db.entity.book.Book;
@@ -40,6 +39,7 @@ import static ru.molefed.utils.JsonUtils.asJsonString;
 @SpringBootTest(classes = BookApplication.class)
 @WebAppConfiguration
 @AutoConfigureMockMvc
+@ContextConfiguration
 public class BookControllerAppIntegrationTest {
 
     @Autowired
@@ -51,6 +51,7 @@ public class BookControllerAppIntegrationTest {
     private Date date = DateUtils.asDate(LocalDate.of(2015, 02, 20));
 
     @Test
+    @WithMockUser(username="misha", authorities = {Roles.USER})
     public void test() throws Exception {
         save();
         allAndUpdate();

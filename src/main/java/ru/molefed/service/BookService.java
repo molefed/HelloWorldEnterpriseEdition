@@ -3,10 +3,8 @@ package ru.molefed.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 import ru.molefed.db.entity.book.Author;
 import ru.molefed.db.entity.book.Book;
 import ru.molefed.db.repo.book.AuthorRepository;
@@ -34,7 +32,7 @@ public class BookService {
         return result;
     }
 
-//    @Transactional
+    @Transactional
     public BookDto saveBooks(BookDto bookDto) {
         Book book = bookDto.getId() == null ? new Book() : bookRepository.findById(bookDto.getId()).get();
         book.setId(bookDto.getId());

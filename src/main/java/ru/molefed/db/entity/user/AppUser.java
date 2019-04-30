@@ -4,12 +4,13 @@ import ru.molefed.db.entity.AEntityFakeDeletedWithNameAndId;
 import ru.molefed.db.entity.AEntityWithNameAndId;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.Set;
 
 @Entity
-@Table(name = "AppUser",
+@Table(name = "AppUser"/*,
         uniqueConstraints = {
-                @UniqueConstraint(name = "AppUserNameUK", columnNames = AEntityWithNameAndId.NAME) })
+                @UniqueConstraint(name = "AppUserNameUK", columnNames = AEntityWithNameAndId.NAME) }*/)
 public class AppUser extends AEntityFakeDeletedWithNameAndId {
 
     @Column(name = "encrytedPassword", length = 128, nullable = false)
@@ -17,7 +18,7 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
-    })
+    }) // TODO: 30.04.2019 разобраться с каскадами
     @JoinTable(name = UserRole.TABLE,
             joinColumns = @JoinColumn(name = UserRole.USER_ID),
             inverseJoinColumns = @JoinColumn(name = UserRole.ROLE_ID)
@@ -37,8 +38,18 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
     }
 
     public Set<AppRole> getRoles() {
-        return roles;
+        return Collections.unmodifiableSet(roles);
     }
+
+    public boolean addRole(AppRole role) {
+        return roles.add(role);
+    }
+
+    public boolean removeRole(AppRole role) {
+        return roles.remove(role);
+    }
+
+
 
 
 }
