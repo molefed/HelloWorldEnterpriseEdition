@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.db.entity.user.AppRole;
 import ru.molefed.db.entity.user.AppUser;
 import ru.molefed.db.repo.user.AppUserRepository;
@@ -22,6 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private AppUserRepository appUserRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String userName) {
         AppUser appUser = appUserRepository.findByName(userName);
 

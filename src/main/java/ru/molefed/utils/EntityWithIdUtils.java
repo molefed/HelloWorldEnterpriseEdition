@@ -4,11 +4,11 @@ import ru.molefed.db.entity.AEntityWithId;
 
 public class EntityWithIdUtils {
 
-    public static boolean isEmptyId(AEntityWithId entity){
+    public static boolean isEmptyId(AEntityWithId entity) {
         return entity == null || entity.getId() == null;
     }
 
-    public static boolean equalsId(AEntityWithId obj1, AEntityWithId obj2){
+    public static boolean equalsId(AEntityWithId obj1, AEntityWithId obj2) {
         if (isEmptyId(obj1) || isEmptyId(obj2))
             return false;
 

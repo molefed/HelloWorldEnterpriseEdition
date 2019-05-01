@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.db.entity.user.AppRole;
@@ -26,6 +27,8 @@ public class UserService {
     private AppUserRepository appUserRepository;
     @Autowired
     private AppRoleRepository appRoleRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<AppUserDto> getAll(Integer page, Integer size) {
 
@@ -57,7 +60,7 @@ public class UserService {
         user.setName(userDto.getName());
 
         if (!StringUtils.isEmpty(userDto.getPassword()))
-            user.setEncrytedPassword(EncrytedPasswordUtils.encrytePassword(userDto.getPassword()));
+            user.setEncrytedPassword(passwordEncoder.encode(userDto.getPassword()));
 
         // TODO: 30.04.2019 переписать на универсальный мерджинг
         Set<AppRole> rolesDto = new HashSet<>();
@@ -69,9 +72,9 @@ public class UserService {
 
             user.addRole(role);
         }
-        for (AppRole role : new HashSet<>(user.getRoles())){
+        for (AppRole role : new HashSet<>(user.getRoles())) {
             if (!rolesDto.contains(role)) {
-                 user.removeRole(role);
+                user.removeRole(role);
             }
         }
 

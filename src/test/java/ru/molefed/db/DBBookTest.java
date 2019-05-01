@@ -58,7 +58,7 @@ public class DBBookTest {
         assertEquals("Война и мир", b1.getTitle());
         assertEquals(651.9867, b1.getPrice(), 0.00001);
         Assert.assertEquals(CatalogType.CLOSE, b1.getCatalogType());
-        assertEquals(date,  b1.getDate());
+        assertEquals(date, b1.getDate());
 
         b1.setCatalogType(CatalogType.OPEN);
         author = b1.getAuthor();
@@ -86,7 +86,7 @@ public class DBBookTest {
         assertEquals("Война и мир", b.getTitle());
         assertEquals(651.9867, b.getPrice(), 0.00001);
         Assert.assertEquals(CatalogType.OPEN, b.getCatalogType());
-        assertEquals(date,  b.getDate());
+        assertEquals(date, b.getDate());
 
         List<Author> authors = authorRepository.findAll();
         assertEquals(1, authors.size());

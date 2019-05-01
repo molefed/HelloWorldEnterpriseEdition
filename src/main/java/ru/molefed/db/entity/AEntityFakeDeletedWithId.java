@@ -6,7 +6,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class AEntityFakeDeletedWithId extends AEntityWithId implements EntityFakeDeletedWithId {
 
-    @Column(name="deleted", nullable = false)
+    @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
 
     @Override

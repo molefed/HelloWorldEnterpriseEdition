@@ -5,12 +5,13 @@ import ru.molefed.db.entity.user.AppRole;
 import ru.molefed.db.entity.user.AppUser;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public class AppUserDto extends AEntityWithNameAndId {
 
     private String password;
-    private Set<String> roles;
+    private Set<String> roles = new HashSet<>();
 
     public AppUserDto() {
 

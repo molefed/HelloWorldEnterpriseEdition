@@ -43,8 +43,6 @@ public class BookService {
         if (!EntityWithIdUtils.isEmptyId(bookDto.getAuthor()) &&
                 !EntityWithIdUtils.equalsId(bookDto.getAuthor(), book.getAuthor())) {
             Author author = authorRepository.findById(bookDto.getAuthor().getId()).get();
-            if (author == null)
-                throw new IllegalArgumentException("Author with id " + bookDto.getAuthor().getId() + " not found");
             book.setAuthor(author);
         }
 

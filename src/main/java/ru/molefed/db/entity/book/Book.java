@@ -9,16 +9,16 @@ import java.util.Date;
 @Entity
 @Table(name = "Book")
 public class Book extends AEntityFakeDeletedWithId {
-    @Column(name="title", length=128, nullable = false)
+    @Column(name = "title", length = 128, nullable = false)
     private String title;
     @OneToOne(cascade = {CascadeType.ALL}) // разобраться почему сохранение без этого не пашет
-    @JoinColumn(name="author_id", nullable=false)
+    @JoinColumn(name = "author_id", nullable = false)
     private Author author;
-    @Column(name="date")
+    @Column(name = "date")
     private Date date;
-    @Column(name="price", scale = 18, precision = 4)
+    @Column(name = "price", scale = 18, precision = 4)
     private Double price;
-    @Column(name="catalogType")
+    @Column(name = "catalogType")
     @Enumerated(EnumType.ORDINAL)
     private CatalogType catalogType = CatalogType.OPEN;
 
@@ -38,12 +38,12 @@ public class Book extends AEntityFakeDeletedWithId {
         this.author = author; // возможно стоит добавлять еще и в сет книжек у автора
     }
 
-    @DateTimeFormat(pattern="dd/mm/yyyy")
+    @DateTimeFormat(pattern = "dd/mm/yyyy")
     public Date getDate() {
         return date;
     }
 
-    @DateTimeFormat(pattern="dd/mm/yyyy")
+    @DateTimeFormat(pattern = "dd/mm/yyyy")
     public void setDate(Date date) {
         this.date = date;
     }

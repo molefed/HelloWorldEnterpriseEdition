@@ -51,7 +51,7 @@ public class BookControllerAppIntegrationTest {
     private Date date = DateUtils.asDate(LocalDate.of(2015, 02, 20));
 
     @Test
-    @WithMockUser(username="misha", authorities = {Roles.USER})
+    @WithMockUser(username = "misha", authorities = {Roles.USER})
     public void test() throws Exception {
         save();
         allAndUpdate();

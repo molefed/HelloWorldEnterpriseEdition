@@ -19,40 +19,37 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-		entityManagerFactoryRef = "entityManagerFactory",
-		basePackages = { "ru.molefed.db.repo" }
+        entityManagerFactoryRef = "entityManagerFactory",
+        basePackages = {"ru.molefed.db.repo"}
 )
 public class DBConfig {
 
-	@Primary
-	@Bean(name = "dataSource")
-	@ConfigurationProperties(prefix = "spring.datasource")
-	public DataSource dataSource()
-	{
-		return DataSourceBuilder.create().build();
-	}
+    @Primary
+    @Bean(name = "dataSource")
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public DataSource dataSource() {
+        return DataSourceBuilder.create().build();
+    }
 
-	@Primary
-	@Bean(name = "entityManagerFactory")
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-			EntityManagerFactoryBuilder builder,
-			@Qualifier("dataSource") DataSource dataSource
-	)
-	{
-		return builder
-				.dataSource(dataSource)
-				.packages("ru.molefed")
-				.persistenceUnit("db")
-				.build();
-	}
+    @Primary
+    @Bean(name = "entityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            EntityManagerFactoryBuilder builder,
+            @Qualifier("dataSource") DataSource dataSource
+    ) {
+        return builder
+                .dataSource(dataSource)
+                .packages("ru.molefed")
+                .persistenceUnit("db")
+                .build();
+    }
 
-	@Primary
-	@Bean(name = "transactionManager")
-	public PlatformTransactionManager transactionManager(
-			@Qualifier("entityManagerFactory") EntityManagerFactory
-					entityManagerFactory
-	)
-	{
-		return new JpaTransactionManager(entityManagerFactory);
-	}
+    @Primary
+    @Bean(name = "transactionManager")
+    public PlatformTransactionManager transactionManager(
+            @Qualifier("entityManagerFactory") EntityManagerFactory
+                    entityManagerFactory
+    ) {
+        return new JpaTransactionManager(entityManagerFactory);
+    }
 }

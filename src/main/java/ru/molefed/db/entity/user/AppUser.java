@@ -1,10 +1,10 @@
 package ru.molefed.db.entity.user;
 
 import ru.molefed.db.entity.AEntityFakeDeletedWithNameAndId;
-import ru.molefed.db.entity.AEntityWithNameAndId;
 
 import javax.persistence.*;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,15 +15,12 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
 
     @Column(name = "encrytedPassword", length = 128, nullable = false)
     private String encrytedPassword;
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    }) // TODO: 30.04.2019 разобраться с каскадами
+    @ManyToMany( cascade = CascadeType.ALL ) // TODO: 30.04.2019 разобраться с каскадами
     @JoinTable(name = UserRole.TABLE,
             joinColumns = @JoinColumn(name = UserRole.USER_ID),
             inverseJoinColumns = @JoinColumn(name = UserRole.ROLE_ID)
     )
-    private Set<AppRole> roles;
+    private Set<AppRole> roles = new HashSet<>();
 
     public AppUser() {
 
@@ -48,8 +45,6 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
     public boolean removeRole(AppRole role) {
         return roles.remove(role);
     }
-
-
 
 
 }
