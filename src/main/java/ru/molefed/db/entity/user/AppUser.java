@@ -4,17 +4,22 @@ import ru.molefed.db.entity.AEntityFakeDeletedWithNameAndId;
 
 import javax.persistence.*;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "AppUser"/*,
+@Table(name = AppUser.TABLE/*,
         uniqueConstraints = {
                 @UniqueConstraint(name = "AppUserNameUK", columnNames = AEntityWithNameAndId.NAME) }*/)
 public class AppUser extends AEntityFakeDeletedWithNameAndId {
+    public static final String TABLE = "AppUser";
+    public static final String LAST_LOGIN = "lastLogin";
 
     @Column(name = "encrytedPassword", length = 128, nullable = false)
     private String encrytedPassword;
+    @Column(name = AppUser.LAST_LOGIN)
+    private Date lastLogin;
     @ManyToMany( cascade = CascadeType.ALL ) // TODO: 30.04.2019 разобраться с каскадами
     @JoinTable(name = UserRole.TABLE,
             joinColumns = @JoinColumn(name = UserRole.USER_ID),
@@ -46,5 +51,12 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
         return roles.remove(role);
     }
 
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
 
 }

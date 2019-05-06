@@ -2,6 +2,7 @@ package ru.molefed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,20 +13,23 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import ru.molefed.service.UserDetailsServiceImpl;
+import ru.molefed.security.AuthenticationSuccessHandlerImpl;
+import ru.molefed.security.UserDetailsServiceImpl;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@ComponentScan("ru.molefed.security")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private AuthenticationSuccessHandlerImpl successHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -56,11 +60,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error=true")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful")
+                .and().formLogin().permitAll().successHandler(successHandler);
 
         http.authorizeRequests().and()
                 .rememberMe().tokenRepository(this.persistentTokenRepository())
                 .tokenValiditySeconds(1 * 24 * 60 * 60);
+
+//        http.authorizeRequests()
+//                .antMatchers("/login")
+//                .permitAll()
+//                .and()
+//                .formLogin()
+//                .permitAll()
+//                .successHandler(successHandler)
+//                .and()
+//                .csrf()
+//                .disable();
 
     }
 

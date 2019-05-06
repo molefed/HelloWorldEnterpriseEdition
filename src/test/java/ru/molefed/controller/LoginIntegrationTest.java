@@ -21,13 +21,16 @@ import org.springframework.test.web.servlet.MvcResult;
 import ru.molefed.BookApplication;
 import ru.molefed.Roles;
 import ru.molefed.db.entity.user.AppRole;
+import ru.molefed.db.entity.user.AppUser;
 import ru.molefed.db.repo.user.AppRoleRepository;
 import ru.molefed.db.repo.user.AppUserRepository;
 import ru.molefed.dto.AppUserDto;
 import ru.molefed.service.UserService;
 import ru.molefed.utils.JsonUtils;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,6 +53,7 @@ public class LoginIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     private AppUserDto userDto;
+    private AppUserDto userDtoWithoutPas;
 
     @Before
     public void tearUp() {
@@ -60,7 +64,7 @@ public class LoginIntegrationTest {
         userDto.setPassword("pas1");
         userDto.addRole(Roles.USER);
 
-        userService.save(userDto);
+        userDtoWithoutPas = userService.save(userDto);
     }
 
     @After
@@ -71,11 +75,18 @@ public class LoginIntegrationTest {
 
     @Test
     public void login() throws Exception {
+        AppUser user = appUserRepository.findById(userDtoWithoutPas.getId()).get();
+        assertNull(user.getLastLogin());
+
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDto.getName(),
                 userDto.getPassword());
         Authentication authentication = authenticationProvider.authenticate(auth);
 
         assertEquals(authentication.getName(), userDto.getName());
+
+        user = appUserRepository.findById(userDtoWithoutPas.getId()).get();
+//        assertNotNull(user.getLastLogin());
+        // TODO: 02.05.2019 возможно провайдер не вызывает листенер удачной авторизации
     }
 
     @Test

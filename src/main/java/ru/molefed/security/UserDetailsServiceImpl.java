@@ -1,4 +1,4 @@
-package ru.molefed.service;
+package ru.molefed.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
