@@ -1,10 +1,11 @@
 package ru.molefed.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -28,13 +29,13 @@ import ru.molefed.db.repo.user.AppUserRepository;
 import ru.molefed.dto.AppUserDto;
 import ru.molefed.service.UserService;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = BookApplication.class)
 @WebAppConfiguration
 @AutoConfigureMockMvc
@@ -56,7 +57,7 @@ public class LoginIntegrationTest {
     private AppUserDto userDto;
     private AppUserDto userDtoWithoutPas;
 
-    @Before
+    @BeforeEach
     public void tearUp() {
         appRoleRepository.save(new AppRole(Roles.USER));
 
@@ -68,7 +69,7 @@ public class LoginIntegrationTest {
         userDtoWithoutPas = userService.save(userDto);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         appUserRepository.deleteAll();
         appRoleRepository.deleteAll();
@@ -106,17 +107,21 @@ public class LoginIntegrationTest {
         assertEquals(userDto2.getName(), userDto.getName());
     }
 
-    @Test(expected = BadCredentialsException.class)
+    @Test
     public void badLogin() {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("user", "pas");
-        authenticationProvider.authenticate(auth);
+        Assertions.assertThrows(BadCredentialsException.class, () -> {
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("user", "pas");
+            authenticationProvider.authenticate(auth);
+        });
     }
 
-    @Test(expected = BadCredentialsException.class)
+    @Test
     public void badPas() {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDto.getName(),
-                userDto.getPassword() + "123");
-        Authentication authentication = authenticationProvider.authenticate(auth);
+        Assertions.assertThrows(BadCredentialsException.class, () -> {
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDto.getName(),
+                    userDto.getPassword() + "123");
+            Authentication authentication = authenticationProvider.authenticate(auth);
+        });
     }
 
 

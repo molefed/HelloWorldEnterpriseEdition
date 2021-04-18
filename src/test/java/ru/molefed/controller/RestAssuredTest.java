@@ -4,26 +4,26 @@ import io.restassured.RestAssured;
 import io.restassured.authentication.FormAuthConfig;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.molefed.BookApplication;
 import ru.molefed.Roles;
 import ru.molefed.dto.AppUserDto;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = BookApplication.class)
 @WebAppConfiguration
 @ContextConfiguration
-public class RestAssuredTest {
+class RestAssuredTest {
 
-// TODO: 01.05.2019 более натуральный способ проверки, изучить потом стоит, сходу веб сервер не поднялся
+    // TODO: 01.05.2019 более натуральный способ проверки, изучить потом стоит, сходу веб сервер не поднялся
 //    @Test
     public void givenUserWithWritePrivilegeAndHasPermission_whenPostFoo_thenOk() {
         {

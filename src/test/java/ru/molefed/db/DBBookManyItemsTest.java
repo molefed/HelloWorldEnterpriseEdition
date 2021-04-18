@@ -1,15 +1,15 @@
 package ru.molefed.db;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.BookApplication;
 import ru.molefed.db.entity.book.Author;
@@ -21,20 +21,20 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ContextConfiguration(classes = {BookApplication.class})
 @Transactional
-public class DBBookManyItemsTest {
+class DBBookManyItemsTest {
 
     @Autowired
     private BookRepository bookRepository;
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Author author = new Author("Толстой");
         for (int i = 1; i <= 100; i++) {
@@ -48,7 +48,7 @@ public class DBBookManyItemsTest {
     }
 
     @Test
-    public void testPagination() {
+    void pagination() {
         Page<Book> result = bookRepository.findAll(
                 PageRequest.of(0, 5, Sort.Direction.DESC, "id"));
 
@@ -72,7 +72,7 @@ public class DBBookManyItemsTest {
     }
 
     @Test
-    public void testFindUseMethod() {
+    void findUseMethod() {
         Author author = authorRepository.findByName("Толстой");
         Book b = bookRepository.findByAuthor_idAndTitle(author.getId(), "Война и мир35").get();
         assertNotNull(b);
@@ -84,14 +84,14 @@ public class DBBookManyItemsTest {
     }
 
     @Test
-    public void testCustomRepository() {
+    void customRepository() {
         Book b = bookRepository.getBookWithMaxId();
         assertNotNull(b);
         assertTrue(b.getId() >= 100);
     }
 
     @Test
-    public void testFindDeleted() {
+    void findDeleted() {
         assertEquals(100, bookRepository.findByDeleted(false).size());
 
         Book b = bookRepository.getBookWithMaxId();
@@ -109,7 +109,6 @@ public class DBBookManyItemsTest {
 
         assertEquals(bookRepository.findByDeleted(true), bookRepository.findMarked(true));
         assertEquals(bookRepository.findByDeleted(true), bookRepository.findAll());
-
 
     }
 
