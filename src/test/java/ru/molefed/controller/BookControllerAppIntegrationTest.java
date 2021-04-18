@@ -1,5 +1,6 @@
 package ru.molefed.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,8 @@ import ru.molefed.db.entity.book.Book;
 import ru.molefed.db.repo.book.AuthorRepository;
 import ru.molefed.db.repo.book.BookRepository;
 import ru.molefed.dto.BookDto;
-import ru.molefed.utils.DateUtils;
-import ru.molefed.utils.JsonUtils;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
@@ -33,7 +31,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.molefed.utils.JsonUtils.asJsonString;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BookApplication.class)
@@ -48,7 +45,9 @@ public class BookControllerAppIntegrationTest {
     private AuthorRepository authorRepository;
     @Autowired
     private BookRepository bookRepository;
-    private Date date = DateUtils.asDate(LocalDate.of(2015, 02, 20));
+    @Autowired
+    private ObjectMapper objectMapper;
+    private final LocalDate date = LocalDate.of(2015, 2, 20);
 
     @Test
     @WithMockUser(username = "misha", authorities = {Roles.USER})
@@ -72,12 +71,12 @@ public class BookControllerAppIntegrationTest {
         b.setPrice(32.2);
 
         MvcResult result = mockMvc.perform(post("/books/save").contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(b)))
+                .content(objectMapper.writeValueAsString(b)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
-        BookDto b1 = JsonUtils.asObject(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto b1 = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
         assertBook(b, author);
     }
 
@@ -95,7 +94,7 @@ public class BookControllerAppIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-        List<BookDto> list = JsonUtils.asList(result.getResponse().getContentAsString(), BookDto.class);
+        List<BookDto> list = objectMapper.readValue(result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, BookDto.class));
         assertEquals(1, list.size());
         BookDto b = list.get(0);
         assertBook(b, authorRepository.findAll().get(0));
@@ -106,12 +105,12 @@ public class BookControllerAppIntegrationTest {
         b.setTitle("Сказка о царе Солтане");
 
         result = mockMvc.perform(post("/books/save").contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(b)))
+                .content(objectMapper.writeValueAsString(b)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
-        BookDto b1 = JsonUtils.asObject(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto b1 = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
         assertEquals(b1.getTitle(), "Сказка о царе Солтане");
         assertEquals(b1.getDate(), date);
         assertEquals(b1.getPrice(), 32.2, 0.01);

@@ -1,5 +1,6 @@
 package ru.molefed.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,9 +27,7 @@ import ru.molefed.db.repo.user.AppRoleRepository;
 import ru.molefed.db.repo.user.AppUserRepository;
 import ru.molefed.dto.AppUserDto;
 import ru.molefed.service.UserService;
-import ru.molefed.utils.JsonUtils;
 
-import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,6 +51,8 @@ public class LoginIntegrationTest {
     private AuthenticationProvider authenticationProvider;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
     private AppUserDto userDto;
     private AppUserDto userDtoWithoutPas;
 
@@ -101,7 +102,7 @@ public class LoginIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        AppUserDto userDto2 = JsonUtils.asObject(result.getResponse().getContentAsString(), AppUserDto.class);
+        AppUserDto userDto2 = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserDto.class);
         assertEquals(userDto2.getName(), userDto.getName());
     }
 
@@ -117,7 +118,6 @@ public class LoginIntegrationTest {
                 userDto.getPassword() + "123");
         Authentication authentication = authenticationProvider.authenticate(auth);
     }
-
 
 
 }

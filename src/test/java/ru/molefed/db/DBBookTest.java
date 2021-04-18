@@ -15,10 +15,8 @@ import ru.molefed.db.entity.book.Book;
 import ru.molefed.db.entity.book.CatalogType;
 import ru.molefed.db.repo.book.AuthorRepository;
 import ru.molefed.db.repo.book.BookRepository;
-import ru.molefed.utils.DateUtils;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -33,26 +31,26 @@ public class DBBookTest {
     private BookRepository bookRepository;
     @Autowired
     private AuthorRepository authorRepository;
-    private Date date = DateUtils.asDate(LocalDate.of(2015, 02, 20));
+    private final LocalDate date = LocalDate.of(2015, 2, 20);
 
     @Test
     @Commit // если не ставим, тест ниже провалится, логично
     public void testMaping() {
         Author author = new Author("Толстой");
-        Book b = new Book();
-        b.setAuthor(author);
-        b.setTitle("Война и мир");
-        b.setPrice(651.9867);
-        b.setCatalogType(CatalogType.CLOSE);
-        b.setDate(date);
-        assertNull(b.getId());
+        Book book = new Book();
+        book.setAuthor(author);
+        book.setTitle("Война и мир");
+        book.setPrice(651.9867);
+        book.setCatalogType(CatalogType.CLOSE);
+        book.setDate(date);
+        assertNull(book.getId());
         assertEquals(0, author.getBooks().size());
 
-        b = bookRepository.save(b);
-        assertNotNull(b.getId());
+        book = bookRepository.save(book);
+        assertNotNull(book.getId());
         assertEquals(0, author.getBooks().size()); // видимо в коллекцию нужно руками складывать если нужно до коммита
 
-        Book b1 = bookRepository.findById(b.getId()).get();
+        Book b1 = bookRepository.findById(book.getId()).get();
 
         Assert.assertEquals("Толстой", b1.getAuthor().getName());
         assertEquals("Война и мир", b1.getTitle());
@@ -64,10 +62,10 @@ public class DBBookTest {
         author = b1.getAuthor();
         author.setName("Tolstoi");
         b1.setAuthor(author);
-        assertTrue(b1 == b); // юзает кэш
+        assertTrue(b1 == book); // юзает кэш
 //        b = bookRepository.save(b1);
 
-        b = bookRepository.findById(b.getId()).get(); // юзает кэш
+        book = bookRepository.findById(book.getId()).get(); // юзает кэш
         Assert.assertEquals("Tolstoi", b1.getAuthor().getName());
         Assert.assertEquals(CatalogType.OPEN, b1.getCatalogType());
 

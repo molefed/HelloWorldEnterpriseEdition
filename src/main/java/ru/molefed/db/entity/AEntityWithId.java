@@ -36,8 +36,9 @@ public class AEntityWithId implements EntityWithId {
 
     @Override
     public boolean equals(Object that) {
-        if (getId() == null || that == null || !(that instanceof EntityWithId))
+        if (getId() == null || !(that instanceof EntityWithId)) {
             return super.equals(that);
+        }
 
         EntityWithId entityWithId = (EntityWithId) that;
         return getId().equals(entityWithId.getId());

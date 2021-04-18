@@ -19,10 +19,12 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        entityManagerFactoryRef = "entityManagerFactory",
         basePackages = {"ru.molefed.db.repo"}
 )
 public class DBConfig {
+
+    public DBConfig() {
+    }
 
     @Primary
     @Bean(name = "dataSource")

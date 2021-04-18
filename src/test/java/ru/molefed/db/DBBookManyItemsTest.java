@@ -17,8 +17,7 @@ import ru.molefed.db.entity.book.Book;
 import ru.molefed.db.repo.book.AuthorRepository;
 import ru.molefed.db.repo.book.BookRepository;
 
-import java.sql.Time;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -42,7 +41,7 @@ public class DBBookManyItemsTest {
             Book b = new Book();
             b.setAuthor(author);
             b.setTitle("Война и мир" + i);
-            b.setDate(Time.valueOf(LocalTime.now()));
+            b.setDate(LocalDate.now());
 
             bookRepository.save(b);
         }

@@ -1,14 +1,16 @@
 package ru.molefed.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.molefed.db.entity.AEntityWithId;
 import ru.molefed.db.entity.book.Book;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class BookDto extends AEntityWithId {
 
     private String title;
-    private Date date;
+    private LocalDate date;
     private Double price;
     private AEntityWithId author;
 
@@ -24,11 +26,11 @@ public class BookDto extends AEntityWithId {
         this.title = title;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
