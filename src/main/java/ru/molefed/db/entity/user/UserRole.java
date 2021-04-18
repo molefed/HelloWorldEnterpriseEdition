@@ -9,9 +9,9 @@ import javax.persistence.*;
 //        uniqueConstraints = {
 //                @UniqueConstraint(name = "UserRoleUserIdRoleIdUk", columnNames = {UserRole.USER_ID, UserRole.ROLE_ID})}*/)
 public class UserRole /*extends AEntityWithId*/ {
-    public static final String TABLE = "UserRole";
-    public static final String USER_ID = "userId";
-    public static final String ROLE_ID = "roleId";
+    public static final String TABLE = "HWEE_USER_ROLE";
+    public static final String USER_ID = "USER_ID";
+    public static final String ROLE_ID = "ROLE_ID";
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = USER_ID, nullable = false)

@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "AppRole"/*,
+@Table(name = "HWEE_ROLE"/*,
         uniqueConstraints = {
                 @UniqueConstraint(name = "AppRoleNameUK", columnNames = AEntityWithNameAndId.NAME) }*/)
 public class AppRole extends AEntityWithNameAndId {

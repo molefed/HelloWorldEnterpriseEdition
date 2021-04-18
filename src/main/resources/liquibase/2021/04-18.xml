@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="afedoseev" id="USER_INIT">
+        <createTable tableName="HWEE_USER">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="ENCRYTED_PASSWORD" type="varchar(128)"/>
+            <column name="DELETED" type="boolean"/>
+            <column name="LAST_LOGIN" type="datetime"/>
+        </createTable>
+
+        <createTable tableName="HWEE_ROLE">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="HWEE_USER_ROLE">
+            <column name="USER_ID" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="FK_HWEE_USER"
+                             references="HWEE_USER(ID)"/>
+            </column>
+            <column name="ROLE_ID" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="FK_HWEE_ROLE"
+                             references="HWEE_ROLE(ID)"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint
+                tableName="HWEE_USER_ROLE"
+                columnNames="USER_ID, ROLE_ID"
+                constraintName="UQ_HWEE_USER_ROLE"/>
+
+    </changeSet>
+
+    <changeSet author="afedoseev" id="BOOK_INIT">
+        <createTable tableName="HWEE_AUTHOR">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="HWEE_BOOK">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(128)">
+            </column>
+            <column name="DELETED" type="boolean"/>
+            <column name="TITLE" type="varchar(128)"/>
+            <column name="AUTHOR_ID" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="FK_HWEE_BOOK_AUTHOR"
+                             references="HWEE_AUTHOR(ID)"/>
+            </column>
+            <column name="DATE" type="date"/>
+            <column name="PRICE" type="double"/>
+            <column name="CATALOG_TYPE" type="integer"/>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,14 +1,12 @@
 package ru.molefed.db.entity.book;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import ru.molefed.db.entity.AEntityFakeDeletedWithId;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
-@Table(name = "Book")
+@Table(name = "HWEE_BOOK")
 public class Book extends AEntityFakeDeletedWithId {
     @Column(name = "title", length = 128, nullable = false)
     private String title;
@@ -19,7 +17,7 @@ public class Book extends AEntityFakeDeletedWithId {
     private LocalDate date;
     @Column(name = "price", scale = 18, precision = 4)
     private Double price;
-    @Column(name = "catalogType")
+    @Column(name = "CATALOG_TYPE")
     @Enumerated(EnumType.ORDINAL)
     private CatalogType catalogType = CatalogType.OPEN;
 
