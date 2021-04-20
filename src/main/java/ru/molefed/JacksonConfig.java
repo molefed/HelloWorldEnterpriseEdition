@@ -2,7 +2,6 @@ package ru.molefed;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -32,7 +31,7 @@ public class JacksonConfig {
     private Module jsonMapperJava8DateTimeModule() {
         SimpleModule bean = new SimpleModule();
 
-        bean.addSerializer(ZonedDateTime.class, new JsonSerializer<ZonedDateTime>() {
+        bean.addSerializer(ZonedDateTime.class, new JsonSerializer<>() {
             @Override
             public void serialize(
                     ZonedDateTime zonedDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
@@ -41,14 +40,14 @@ public class JacksonConfig {
             }
         });
 
-        bean.addDeserializer(ZonedDateTime.class, new JsonDeserializer<ZonedDateTime>() {
+        bean.addDeserializer(ZonedDateTime.class, new JsonDeserializer<>() {
             @Override
-            public ZonedDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+            public ZonedDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
                 return ZonedDateTime.parse(jsonParser.getValueAsString(), DateTimeFormatter.ISO_ZONED_DATE_TIME);
             }
         });
 
-        bean.addSerializer(LocalDateTime.class, new JsonSerializer<LocalDateTime>() {
+        bean.addSerializer(LocalDateTime.class, new JsonSerializer<>() {
             @Override
             public void serialize(
                     LocalDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
@@ -57,14 +56,14 @@ public class JacksonConfig {
             }
         });
 
-        bean.addDeserializer(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+        bean.addDeserializer(LocalDateTime.class, new JsonDeserializer<>() {
             @Override
-            public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+            public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
                 return LocalDateTime.parse(jsonParser.getValueAsString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             }
         });
 
-        bean.addSerializer(LocalDate.class, new JsonSerializer<LocalDate>() {
+        bean.addSerializer(LocalDate.class, new JsonSerializer<>() {
             @Override
             public void serialize(
                     LocalDate localDate, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
@@ -73,9 +72,9 @@ public class JacksonConfig {
             }
         });
 
-        bean.addDeserializer(LocalDate.class, new JsonDeserializer<LocalDate>() {
+        bean.addDeserializer(LocalDate.class, new JsonDeserializer<>() {
             @Override
-            public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+            public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
                 return LocalDate.parse(jsonParser.getValueAsString(), DateTimeFormatter.ISO_LOCAL_DATE);
             }
         });
