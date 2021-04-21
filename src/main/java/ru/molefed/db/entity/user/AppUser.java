@@ -42,15 +42,11 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
     }
 
     public Set<AppRole> getRoles() {
-        return Collections.unmodifiableSet(roles);
+        return roles;
     }
 
-    public boolean addRole(AppRole role) {
-        return roles.add(role);
-    }
-
-    public boolean removeRole(AppRole role) {
-        return roles.remove(role);
+    public void setRoles(Set<AppRole> roles) {
+        this.roles = roles;
     }
 
     public LocalDateTime getLastLogin() {

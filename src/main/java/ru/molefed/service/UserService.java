@@ -7,20 +7,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.molefed.controller.dto.AppUserDto;
 import ru.molefed.db.entity.user.AppRole;
 import ru.molefed.db.entity.user.AppUser;
 import ru.molefed.db.repo.user.AppRoleRepository;
 import ru.molefed.db.repo.user.AppUserRepository;
-import ru.molefed.dto.AppUserDto;
-import ru.molefed.utils.EncrytedPasswordUtils;
 import ru.molefed.utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
     @Autowired
@@ -30,56 +29,26 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<AppUserDto> getAll(Integer page, Integer size) {
-
-        List<AppUserDto> result = new ArrayList<>();
-        List<AppUser> list = appUserRepository.findByDeleted(false, PageRequest.of(page, size, Sort.Direction.ASC, "id"));
-        for (AppUser user : list)
-            result.add(AppUserDto.toDto(user));
-
-        return result;
+    public List<AppUser> getAll(Integer page, Integer size) {
+        return appUserRepository.findByDeleted(false,
+                PageRequest.of(page, size, Sort.Direction.ASC, "id"));
     }
 
-    public AppUserDto get(long id) {
-        AppUser user = appUserRepository.findById(id).get();
-        return AppUserDto.toDto(user);
+    public AppUser get(long id) {
+        return appUserRepository.findById(id).get();
     }
 
-    public AppUserDto get(String name) {
-        AppUser user = appUserRepository.findByName(name);
-        if (user == null)
-            throw new UsernameNotFoundException("Can't find user " + name);
-
-        return AppUserDto.toDto(user);
+    public AppUser get(String name) {
+        return appUserRepository.findByName(name);
     }
 
     @Transactional
-    public AppUserDto save(AppUserDto userDto) {
-        AppUser user = userDto.getId() == null ? new AppUser() : appUserRepository.findById(userDto.getId()).get();
-        user.setId(userDto.getId());
-        user.setName(userDto.getName());
-
-        if (!StringUtils.isEmpty(userDto.getPassword()))
-            user.setEncrytedPassword(passwordEncoder.encode(userDto.getPassword()));
-
-        // TODO: 30.04.2019 переписать на универсальный мерджинг
-        Set<AppRole> rolesDto = new HashSet<>();
-        for (String roleName : userDto.getRoles()) {
-            AppRole role = appRoleRepository.findByName(roleName);
-            if (role == null)
-                throw new IllegalArgumentException("Can't find role " + roleName);
-            rolesDto.add(role);
-
-            user.addRole(role);
-        }
-        for (AppRole role : new HashSet<>(user.getRoles())) {
-            if (!rolesDto.contains(role)) {
-                user.removeRole(role);
-            }
+    public AppUser save(AppUser user, String password) {
+        if (!StringUtils.isEmpty(password)) {
+            user.setEncrytedPassword(passwordEncoder.encode(password));
         }
 
-        appUserRepository.save(user);
-        return AppUserDto.toDto(user);
+        return appUserRepository.save(user);
     }
 
     @Transactional

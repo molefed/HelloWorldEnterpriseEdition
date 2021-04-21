@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.molefed.Roles;
-import ru.molefed.dto.BookDto;
+import ru.molefed.controller.dto.BookDto;
 import ru.molefed.service.BookService;
 
 import java.util.List;

@@ -22,12 +22,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import ru.molefed.BookApplication;
 import ru.molefed.Roles;
+import ru.molefed.controller.dto.AppUserDto;
 import ru.molefed.db.entity.user.AppRole;
 import ru.molefed.db.entity.user.AppUser;
 import ru.molefed.db.repo.user.AppRoleRepository;
 import ru.molefed.db.repo.user.AppUserRepository;
-import ru.molefed.dto.AppUserDto;
 import ru.molefed.service.UserService;
+
+import javax.transaction.Transactional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -54,19 +57,18 @@ public class LoginIntegrationTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    private AppUserDto userDto;
-    private AppUserDto userDtoWithoutPas;
+    private AppUser appUser;
+    private final String pas = "pas1";
 
     @BeforeEach
     public void tearUp() {
-        appRoleRepository.save(new AppRole(Roles.USER));
+        AppRole appRole = appRoleRepository.save(new AppRole(Roles.USER));
 
-        userDto = new AppUserDto();
-        userDto.setName("user1");
-        userDto.setPassword("pas1");
-        userDto.addRole(Roles.USER);
+        appUser = new AppUser();
+        appUser.setName("user1");
+        appUser.setRoles(Set.of(appRole));
 
-        userDtoWithoutPas = userService.save(userDto);
+        appUser = userService.save(appUser, pas);
     }
 
     @AfterEach
@@ -76,25 +78,25 @@ public class LoginIntegrationTest {
     }
 
     @Test
-    public void login() throws Exception {
-        AppUser user = appUserRepository.findById(userDtoWithoutPas.getId()).get();
+    public void login() {
+        AppUser user = appUserRepository.findById(appUser.getId()).get();
         assertNull(user.getLastLogin());
 
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDto.getName(),
-                userDto.getPassword());
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getName(),
+                pas);
         Authentication authentication = authenticationProvider.authenticate(auth);
 
-        assertEquals(authentication.getName(), userDto.getName());
+        assertEquals(authentication.getName(), user.getName());
 
-        user = appUserRepository.findById(userDtoWithoutPas.getId()).get();
+        user = appUserRepository.findById(user.getId()).get();
 //        assertNotNull(user.getLastLogin());
         // TODO: 02.05.2019 возможно провайдер не вызывает листенер удачной авторизации
     }
 
     @Test
     public void current() throws Exception {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDto.getName(),
-                userDto.getPassword());
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(appUser.getName(),
+                pas);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         MvcResult result = mockMvc.perform(get("/users/current").contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +106,7 @@ public class LoginIntegrationTest {
                 .andReturn();
 
         AppUserDto userDto2 = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserDto.class);
-        assertEquals(userDto2.getName(), userDto.getName());
+        assertEquals(userDto2.getName(), appUser.getName());
     }
 
     @Test
@@ -118,11 +120,10 @@ public class LoginIntegrationTest {
     @Test
     public void badPas() {
         Assertions.assertThrows(BadCredentialsException.class, () -> {
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDto.getName(),
-                    userDto.getPassword() + "123");
-            Authentication authentication = authenticationProvider.authenticate(auth);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(appUser.getName(),
+                    pas + "123");
+            authenticationProvider.authenticate(auth);
         });
     }
-
 
 }

@@ -1,11 +1,9 @@
-package ru.molefed.dto;
+package ru.molefed.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.molefed.db.entity.AEntityWithId;
 import ru.molefed.db.entity.book.Book;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class BookDto extends AEntityWithId {
 

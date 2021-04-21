@@ -12,7 +12,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.molefed.BookApplication;
 import ru.molefed.Roles;
-import ru.molefed.dto.AppUserDto;
+import ru.molefed.controller.dto.AppUserDto;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,7 +32,7 @@ class RestAssuredTest {
             AppUserDto userDto = new AppUserDto();
             userDto.setName("user1");
             userDto.setPassword("pas1");
-            userDto.addRole(Roles.USER);
+            userDto.setRoles(Set.of(Roles.USER));
 
             final Response response = givenAuth("tom", "111")
                     .and().body(userDto).and()
