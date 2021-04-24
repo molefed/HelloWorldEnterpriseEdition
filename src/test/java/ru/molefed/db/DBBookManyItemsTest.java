@@ -4,10 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import ru.molefed.db.repo.book.BookRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,6 +30,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ContextConfiguration(classes = {BookApplication.class})
 @Transactional
+
+//https://stackoverflow.com/questions/34617152/how-to-re-create-database-before-each-test-in-spring
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class DBBookManyItemsTest {
 
     @Autowired
@@ -36,15 +43,15 @@ class DBBookManyItemsTest {
 
     @BeforeEach
     public void setUp() {
+        LocalDate now = LocalDate.now();
         Author author = new Author("Толстой");
-        for (int i = 1; i <= 100; i++) {
+        IntStream.range(1, 101).mapToObj(i -> {
             Book b = new Book();
             b.setAuthor(author);
             b.setTitle("Война и мир" + i);
-            b.setDate(LocalDate.now());
-
-            bookRepository.save(b);
-        }
+            b.setDate(now);
+            return b;
+        }).forEach(bookRepository::save);
     }
 
     @Test
@@ -59,7 +66,6 @@ class DBBookManyItemsTest {
             result = bookRepository.findAll(result.nextPageable());
             checkPage(result, index);
         }
-
     }
 
     private void checkPage(Page<Book> result, AtomicInteger index) {

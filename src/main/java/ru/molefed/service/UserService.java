@@ -25,8 +25,6 @@ public class UserService {
     @Autowired
     private AppUserRepository appUserRepository;
     @Autowired
-    private AppRoleRepository appRoleRepository;
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public List<AppUser> getAll(Integer page, Integer size) {
@@ -55,4 +53,5 @@ public class UserService {
     public void delete(long id) {
         appUserRepository.deleteById(id);
     }
+
 }

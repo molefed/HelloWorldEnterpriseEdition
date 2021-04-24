@@ -18,9 +18,9 @@ import java.util.Set;
 public abstract class AppUserMapper {
 
     @Autowired
-    AppUserRepository appUserRepository;
+    private AppUserRepository appUserRepository;
     @Autowired
-    AppRoleRepository appRoleRepository;
+    private AppRoleRepository appRoleRepository;
 
     @Named("toDto")
     public abstract AppUserDto toDto(AppUser user);

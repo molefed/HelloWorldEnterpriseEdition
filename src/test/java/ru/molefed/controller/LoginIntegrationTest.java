@@ -62,11 +62,9 @@ public class LoginIntegrationTest {
 
     @BeforeEach
     public void tearUp() {
-        AppRole appRole = appRoleRepository.save(new AppRole(Roles.USER));
-
         appUser = new AppUser();
         appUser.setName("user1");
-        appUser.setRoles(Set.of(appRole));
+        appUser.setRoles(Set.of(new AppRole(Roles.USER)));
 
         appUser = userService.save(appUser, pas);
     }
