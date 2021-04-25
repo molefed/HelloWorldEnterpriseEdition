@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.moowork.node" version "1.3.1"
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'war'
@@ -31,6 +35,25 @@ tasks.withType(JavaCompile) {
             '-Amapstruct.defaultComponentModel=spring',
             '-Amapstruct.verbose=true'
     ]
+}
+
+task webappNpmInstall(type: NpmTask) {
+    workingDir = file("${projectDir}/webapp")
+    args = ['install']
+}
+
+task webappNpmBuild(type: NpmTask, dependsOn: 'webappNpmInstall') {
+    workingDir = file("${projectDir}/webapp")
+    args = ['run', 'build']
+}
+
+processResources {
+    dependsOn 'copyWebappToBuild'
+}
+
+task copyWebappToBuild(type: Copy, dependsOn: 'webappNpmBuild') {
+    from "${projectDir}/webapp/build/"
+    into "${buildDir}/resources/main/static"
 }
 
 ext {
