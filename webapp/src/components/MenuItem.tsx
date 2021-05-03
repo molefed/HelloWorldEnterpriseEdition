@@ -3,7 +3,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import {
   createStyles,
-  darken,
   makeStyles,
   Theme,
 } from "@material-ui/core/styles";

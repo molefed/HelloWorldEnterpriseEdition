@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Header from "./Header";
@@ -7,6 +7,8 @@ import Footer from "./Footer";
 import Toolbar from "@material-ui/core/Toolbar";
 
 import { DrawerContextProvider } from "../contexts/drawer-context";
+import {UserToken} from "../useToken";
+import Login from "./login/Login";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,14 +28,17 @@ const useStyles = makeStyles(() => ({
 
 type Props = {
   children: NonNullable<ReactNode>;
+  setToken: (token: UserToken) => void;
 };
 
-const Layout: React.FC<Props> = ({ children }) => {
+const Layout: React.FC<Props> = ({ children,
+                                 setToken}) => {
   const classes = useStyles();
+
   return (
     <DrawerContextProvider>
       <div className={classes.root}>
-        <Header />
+        <Header setToken={setToken}/>
         <Toolbar />
         <div className={classes.container}>
           <Drawer />
