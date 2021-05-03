@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, {Dispatch, ReactNode} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Header from "./Header";
@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
 
 type Props = {
   children: NonNullable<ReactNode>;
-  setToken: (token: UserToken) => void;
+  setToken: Dispatch<UserToken>
 };
 
 const Layout: React.FC<Props> = ({ children,

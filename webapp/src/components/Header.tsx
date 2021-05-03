@@ -9,7 +9,7 @@ import {useDrawerContext} from "../contexts/drawer-context";
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import {useState} from "react";
+import {Dispatch, useState} from "react";
 import {UserToken} from "../useToken";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-const Header = ({setToken}: { setToken: (token: UserToken) => void }) => {
+const Header = ({setToken}: { setToken: Dispatch<UserToken> }) => {
     const classes = useStyles();
     const {isOpened, toggleIsOpened} = useDrawerContext();
 

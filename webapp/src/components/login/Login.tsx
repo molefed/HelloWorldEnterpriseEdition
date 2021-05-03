@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {Dispatch, useState} from 'react';
 import PropTypes from 'prop-types';
 import {UserToken} from '../../useToken';
 
@@ -21,7 +21,7 @@ async function loginUser(credentials: Credentials): Promise<UserToken|void> {
         .catch(reason => console.log(reason));
 }
 
-export default function Login({setToken}: { setToken: (token: UserToken) => void }) {
+export default function Login({setToken}: { setToken: Dispatch<UserToken> }) {
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
 
