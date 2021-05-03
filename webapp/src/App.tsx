@@ -1,25 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Redirect, Route, Switch } from "react-router-dom";
+
+import { ROUTES } from "./constants/routes";
+import Layout from "./components/Layout";
+import {
+  DashboardPage,
+  CustomersPage,
+  OrdersPage,
+  InventoryPage,
+} from "./pages";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Layout>
+        <Switch>
+          <Route path="/" exact render={() => <Redirect to={ROUTES.main} />} />
+          <Route exact path={ROUTES.main} component={DashboardPage} />
+          <Route exact path={ROUTES.orders} component={OrdersPage} />
+          <Route exact path={ROUTES.customers} component={CustomersPage} />
+          <Route exact path={ROUTES.inventory} component={InventoryPage} />
+        </Switch>
+      </Layout>
   );
 }
 
