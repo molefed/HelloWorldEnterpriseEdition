@@ -3,14 +3,14 @@ import React from 'react';
 import {ROUTES} from "./constants/routes";
 import Layout from "./components/Layout";
 import {CustomersPage, DashboardPage, InventoryPage, OrdersPage,} from "./pages";
-import Login from './components/login/Login';
+import SignIn from './components/login/SignIn';
 import useToken from './useToken';
 
 function App() {
     const {token, setToken} = useToken();
 
     if (!token) {
-        return <Login setToken={setToken}/>
+        return <SignIn setToken={setToken}/>
     }
 
     return (
