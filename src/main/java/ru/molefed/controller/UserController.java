@@ -18,10 +18,14 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
+    private final UserService userService;
+    private final AppUserMapper appUserMapper;
+
     @Autowired
-    private UserService userService;
-    @Autowired
-    private AppUserMapper appUserMapper;
+    public UserController(UserService userService, AppUserMapper appUserMapper) {
+        this.userService = userService;
+        this.appUserMapper = appUserMapper;
+    }
 
     @Secured(Roles.ADMIN)
     @GetMapping(value = "/all", params = {"page", "size"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

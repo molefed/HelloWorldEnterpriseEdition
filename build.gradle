@@ -7,6 +7,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath group: 'cz.habarta.typescript-generator', name: 'typescript-generator-gradle-plugin', version: '2.31.861'
     }
 }
 
@@ -19,12 +20,26 @@ apply plugin: 'idea'
 apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'cz.habarta.typescript-generator'
 
 sourceCompatibility = 11
 targetCompatibility = 11
 
 repositories {
     mavenCentral()
+}
+
+generateTypeScript {
+    jsonLibrary = 'jackson2'
+    classPatterns = [
+            'ru.molefed.controller.dto.**'
+    ]
+    outputFile = 'build/generated-ts/JavaDto.d.ts'
+    outputKind = 'global'
+    declarePropertiesAsOptional = false
+    namespace = 'DTO'
+    customTypeNamingFunction = 'function(name, simpleName) { return name.substring(name.lastIndexOf(\'.\')+1); }'
+    loggingLevel = 'Info'
 }
 
 tasks.withType(JavaCompile) {
@@ -38,11 +53,19 @@ tasks.withType(JavaCompile) {
 }
 
 task webappNpmInstall(type: NpmTask) {
+    onlyIf {
+        project.hasProperty("production")
+    }
+
     workingDir = file("${projectDir}/webapp")
     args = ['install']
 }
 
-task webappNpmBuild(type: NpmTask, dependsOn: 'webappNpmInstall') {
+task webappNpmBuild(type: NpmTask, dependsOn: ['webappNpmInstall', 'generateTypeScript']) {
+    onlyIf {
+        project.hasProperty("production")
+    }
+
     workingDir = file("${projectDir}/webapp")
     args = ['run', 'build']
 }
@@ -52,6 +75,10 @@ processResources {
 }
 
 task copyWebappToBuild(type: Copy, dependsOn: 'webappNpmBuild') {
+    onlyIf {
+        project.hasProperty("production")
+    }
+
     from "${projectDir}/webapp/build/"
     into "${buildDir}/resources/main/static"
 }
@@ -68,6 +95,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.javassist:javassist:3.27.0-GA' // run tests after remove it
     implementation 'org.liquibase:liquibase-core:4.3.2'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"

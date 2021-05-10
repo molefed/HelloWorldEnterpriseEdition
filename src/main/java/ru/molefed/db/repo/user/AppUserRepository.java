@@ -13,8 +13,9 @@ import java.time.LocalDateTime;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long>, EntityFakeDeletedWithNameAndIdRepository<AppUser> {
 
-    @Query("UPDATE AppUser SET lastLogin=:last_login WHERE name = ?#{ principal?.username }")
     @Modifying
-    void updateLastLogin(@Param("last_login") LocalDateTime lastLogin);
+    @Query("UPDATE AppUser SET lastLogin=:lastLogin WHERE name = :userName")
+    void updateLastLogin(@Param("userName") String userName,
+                         @Param("lastLogin") LocalDateTime lastLogin);
 
 }

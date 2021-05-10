@@ -3,29 +3,27 @@ package ru.molefed.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.molefed.controller.dto.AppUserDto;
-import ru.molefed.db.entity.user.AppRole;
 import ru.molefed.db.entity.user.AppUser;
-import ru.molefed.db.repo.user.AppRoleRepository;
 import ru.molefed.db.repo.user.AppUserRepository;
 import ru.molefed.utils.StringUtils;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
 public class UserService {
 
+    private final AppUserRepository appUserRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private AppUserRepository appUserRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserService(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
+        this.appUserRepository = appUserRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public List<AppUser> getAll(Integer page, Integer size) {
         return appUserRepository.findByDeleted(false,
@@ -38,6 +36,10 @@ public class UserService {
 
     public AppUser get(String name) {
         return appUserRepository.findByName(name);
+    }
+
+    public boolean isPasswordValid(AppUser user, String password) {
+        return passwordEncoder.matches(password, user.getEncrytedPassword());
     }
 
     @Transactional

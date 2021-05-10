@@ -46,7 +46,7 @@ type Credentials = {
 }
 
 async function loginUser(credentials: Credentials): Promise<UserToken | void> {
-    return api.get<Credentials, string>("/"/*, credentials*/).then(resp => {
+    return api.post<Credentials, string>("/api_auth_signin", credentials).then(resp => {
         return {token: resp}
     });
 }
