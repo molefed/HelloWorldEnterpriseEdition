@@ -4,13 +4,20 @@ import {ROUTES} from "./constants/routes";
 import Layout from "./components/Layout";
 import {CustomersPage, DashboardPage, InventoryPage, OrdersPage,} from "./pages";
 import SignIn from './components/login/SignIn';
+import SignUp from './components/login/SignUp';
 import useToken from './useToken';
 
-function App() {
+export default function App() {
     const {token, setToken} = useToken();
 
     if (!token) {
-        return <SignIn setToken={setToken}/>
+        return (
+            <Switch>
+                <Route path="/" exact render={() => <Redirect to={"/signin"}/>}/>
+                <Route exact path="/signin" component={() => <SignIn setToken={setToken}/>}/>
+                <Route exact path="/signup" component={() => <SignUp setToken={setToken}/>}/>
+            </Switch>
+        );
     }
 
     return (
@@ -25,5 +32,3 @@ function App() {
         </Layout>
     );
 }
-
-export default App;

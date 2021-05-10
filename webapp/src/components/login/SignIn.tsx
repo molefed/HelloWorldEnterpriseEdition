@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Dispatch, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,21 +13,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {makeStyles, Theme} from "@material-ui/core/styles";
-import {Dispatch, useState} from "react";
 import {UserToken} from "../../useToken";
-
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+import {Copyright} from "./Copyright";
+import {api} from "./../../utils/http";
 
 const useStyles = makeStyles((theme: Theme) => ({
     topBox: {
@@ -56,21 +45,10 @@ type Credentials = {
     password: string
 }
 
-async function loginUser(credentials: Credentials): Promise<UserToken|void> {
-
-    console.log(credentials);
-
-    return fetch('http://localhost:8085', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-    })
-        .then(data => /*data.json()*/ {
-            return { token: 't123'}
-        })
-        .catch(reason => console.log(reason));
+async function loginUser(credentials: Credentials): Promise<UserToken | void> {
+    return api.get<Credentials, string>("/"/*, credentials*/).then(resp => {
+        return {token: resp}
+    });
 }
 
 export default function SignIn({setToken}: { setToken: Dispatch<UserToken> }) {
@@ -143,7 +121,7 @@ export default function SignIn({setToken}: { setToken: Dispatch<UserToken> }) {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link href="/signup" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>

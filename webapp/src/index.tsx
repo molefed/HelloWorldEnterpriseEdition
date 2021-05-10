@@ -1,18 +1,20 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
+import {ThemeProvider} from '@material-ui/core/styles';
 import App from './App';
 import theme from './theme';
+import {LoadingOverlay} from './utils/http';
 
 ReactDOM.render(
     <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
+        <LoadingOverlay/>
+        <CssBaseline/>
         <BrowserRouter>
-            <App />
+            <App/>
         </BrowserRouter>
     </ThemeProvider>,
     document.querySelector('#root'),
