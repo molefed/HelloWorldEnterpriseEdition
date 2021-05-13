@@ -3,9 +3,10 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+                      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <include file="/liquibase/2021/04-18.xml"/>
     <include file="/liquibase/2021/05-10.xml"/>
+    <include file="/liquibase/2021/05-13.xml"/>
 
 </databaseChangeLog>

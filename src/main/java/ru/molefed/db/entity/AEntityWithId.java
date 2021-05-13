@@ -8,7 +8,7 @@ public class AEntityWithId implements EntityWithId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = AEntityWithId.ID, length = 20, unique = true, nullable = false)
+    @Column(name = AEntityWithId.ID)
     protected Long id;
 
     public AEntityWithId() {

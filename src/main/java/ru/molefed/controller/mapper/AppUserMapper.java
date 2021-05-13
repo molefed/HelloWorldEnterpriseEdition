@@ -5,6 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.molefed.controller.dto.AppUserDto;
+import ru.molefed.db.entity.AEntityWithNameAndId;
 import ru.molefed.db.entity.user.AppRole;
 import ru.molefed.db.entity.user.AppUser;
 import ru.molefed.db.repo.user.AppRoleRepository;
@@ -21,6 +22,9 @@ public abstract class AppUserMapper {
     private AppUserRepository appUserRepository;
     @Autowired
     private AppRoleRepository appRoleRepository;
+
+    @Named("toLiteUser")
+    public abstract AEntityWithNameAndId toLiteUser(AppUser user);
 
     @Named("toDto")
     public abstract AppUserDto toDto(AppUser user);

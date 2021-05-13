@@ -30,7 +30,7 @@ public class JwtBearerFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         if (token != null && jwtProvider.validateToken(token)) {
-            SecurityContextHolder.getContext().setAuthentication(jwtProvider.craeteToken(token));
+            SecurityContextHolder.getContext().setAuthentication(jwtProvider.craeteJwtToken(token));
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

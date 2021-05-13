@@ -1,5 +1,6 @@
 package ru.molefed.controller.dto;
 
+@SuppressWarnings("unused")
 public class SignInRequestTO {
     private String username;
     private String password;

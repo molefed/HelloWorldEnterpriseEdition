@@ -1,14 +1,35 @@
 package ru.molefed.controller.dto;
 
-public class SignInResponseTO {
-    private String token;
+import ru.molefed.db.entity.AEntityWithNameAndId;
 
-    public String getToken() {
-        return token;
+@SuppressWarnings("unused")
+public class SignInResponseTO extends RefreshTokenResponseTO {
+    private AEntityWithNameAndId user;
+    private String refreshToken;
+    protected long refreshExpiresIn;
+
+    public AEntityWithNameAndId getUser() {
+        return user;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setUser(AEntityWithNameAndId user) {
+        this.user = user;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public long getRefreshExpiresIn() {
+        return refreshExpiresIn;
+    }
+
+    public void setRefreshExpiresIn(long refreshExpiresIn) {
+        this.refreshExpiresIn = refreshExpiresIn;
     }
 
 }

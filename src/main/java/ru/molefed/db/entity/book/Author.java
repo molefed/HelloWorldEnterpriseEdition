@@ -3,13 +3,15 @@ package ru.molefed.db.entity.book;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.molefed.db.entity.AEntityWithNameAndId;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "HWEE_AUTHOR", uniqueConstraints = {
-        @UniqueConstraint(name = "AuthorNameUK", columnNames = AEntityWithNameAndId.NAME)})
+@Table(name = "HWEE_AUTHOR")
 public class Author extends AEntityWithNameAndId {
 
     @JsonIgnore

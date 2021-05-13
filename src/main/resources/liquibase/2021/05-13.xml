@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="afedoseev" id="REFRESH_TOKEN_INIT">
+        <createTable tableName="HWEE_REFRESH_TOKEN">
+            <column name="TOKEN" type="varchar(4000)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="USER_ID" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="FK_HWEE_REFRESH_TOKEN_USER"
+                             references="HWEE_USER(ID)"/>
+            </column>
+            <column name="EXPIRES_DATE" type="date"/>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
