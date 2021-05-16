@@ -2,7 +2,7 @@ import axios, {AxiosInstance} from "axios";
 import {getToken} from "../useToken";
 import React, {Dispatch, useEffect, useState} from "react";
 import {Backdrop, CircularProgress} from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 
 const baseURL = "http://localhost:9090";
 
@@ -51,13 +51,24 @@ function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>
 
         return config
     }, function (error) {
+        setVisibleBackdrop(false);
         return Promise.reject(error);
     });
 
     asiosInst.interceptors.response.use(function (response) {
         setVisibleBackdrop(false);
+
+        const data: DTO.ExceptionResponseTO = response.data;
+        console.log(data.message);
+
+        if (response.status == 401) { // username\password error
+
+        }
+
         return response;
     }, function (error) {
+        setVisibleBackdrop(false);
         return Promise.reject(error);
     });
+
 }
