@@ -3,7 +3,10 @@ package ru.molefed.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import ru.molefed.controller.dto.RefreshTokenRequestTO;
 import ru.molefed.controller.dto.RefreshTokenResponseTO;
 import ru.molefed.controller.dto.SignInRequestTO;
@@ -33,7 +36,7 @@ public class AuthController {
 
     @Transactional
     @RequestMapping("/generateToken")
-    public SignInResponseTO signin(@RequestBody SignInRequestTO requestTO) {
+    public SignInResponseTO generateToken(@RequestBody SignInRequestTO requestTO) {
         AppUser appUser = userService.get(requestTO.getUsername());
         if (appUser == null || !userService.isPasswordValid(appUser, requestTO.getPassword())) {
             throw new BadCredentialsException("Invalid username or password");
@@ -67,6 +70,11 @@ public class AuthController {
         return authMapper.refrershTokenResponseTO(
                 tokenInfo.getToken(),
                 tokenInfo.getExpiresInSec());
+    }
+
+    @RequestMapping("/signout")
+    public void signout(@RequestBody RefreshTokenRequestTO refreshTokenRequestTO) {
+        refreshTokenService.deleteAllUsersToken(refreshTokenRequestTO.getToken());
     }
 
     private void checkUserValid(AppUser appUser) {

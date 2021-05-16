@@ -1,6 +1,7 @@
 package ru.molefed.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.db.entity.auth.RefreshToken;
@@ -27,6 +28,11 @@ public class RefreshTokenService {
         refreshTokenRepository.save(refreshToken);
     }
 
+    @Transactional
+    public void deleteAllUsersToken(String token) {
+        refreshTokenRepository.deleteToken(token);
+    }
+
     @Transactional(readOnly = true)
     public RefreshToken getValidToken(String token) {
         RefreshToken refreshToken = refreshTokenRepository.findById(token).orElse(null);
@@ -36,6 +42,12 @@ public class RefreshTokenService {
             }
         }
         return null;
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0/30 * * * *") // every 30 min
+    public void deleteOldTokens() {
+        refreshTokenRepository.deleteOldTokens(LocalDateTime.now());
     }
 
 }

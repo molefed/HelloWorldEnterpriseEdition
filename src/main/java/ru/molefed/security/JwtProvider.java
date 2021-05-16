@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 @Component
 public class JwtProvider {
 
-    @Value("$(jwt.secret)")
+    @Value("${jwt.secret:12345m}")
     private String jwtSecret;
-    @Value("$(jwt.expiresInMin)")
+    @Value("${jwt.expiresInMin:30}")
     private long expiresInMin;
-    @Value("$(jwt.refreshExpiresInMin)")
+    @Value("${jwt.refreshExpiresInMin:4320}")
     private long refreshExpiresInMin;
     private final RefreshTokenService refreshTokenService;
 

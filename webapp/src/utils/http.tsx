@@ -9,7 +9,7 @@ const baseURL = "http://localhost:9090";
 export const api = axios.create({
     baseURL: baseURL,
     headers: {
-        "Content-type": "application/json"
+        'Content-Type': 'application/json;charset=UTF-8'
     },
     responseType: "json",
 });
@@ -46,7 +46,7 @@ function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>
 
         const token = getToken();
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`
+            config.headers.Authorization = `Bearer ${token.token}`
         }
 
         return config

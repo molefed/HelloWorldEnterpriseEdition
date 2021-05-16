@@ -7,7 +7,6 @@ import Footer from "./Footer";
 import Toolbar from "@material-ui/core/Toolbar";
 
 import {DrawerContextProvider} from "../contexts/drawer-context";
-import {UserToken} from "../useToken";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -27,7 +26,7 @@ const useStyles = makeStyles(() => ({
 
 type Props = {
     children: NonNullable<ReactNode>;
-    setToken: Dispatch<UserToken>
+    setToken: Dispatch<DTO.SignInResponseTO | undefined>
 };
 
 const Layout: React.FC<Props> = ({

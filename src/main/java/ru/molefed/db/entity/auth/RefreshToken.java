@@ -11,8 +11,8 @@ public class RefreshToken {
     @Id
     @Column(name = "TOKEN")
     private String token;
-    @ManyToOne
-    @JoinColumn(name = "AUTHOR_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
     private AppUser appUser;
     @Column(name = "EXPIRES_DATE")
     private LocalDateTime expiresDate;

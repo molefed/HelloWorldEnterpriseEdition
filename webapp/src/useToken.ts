@@ -1,23 +1,23 @@
 import {useState} from 'react';
 
-export type UserToken = {
-    token: string;
-}
-
 export const getToken = () => {
     const tokenString = localStorage.getItem('token');
     if (tokenString) {
-        const userToken: UserToken = JSON.parse(tokenString);
-        return userToken.token
+        return JSON.parse(tokenString) as DTO.SignInResponseTO;
     }
 };
 
 export default function useToken() {
     const [token, setToken] = useState(getToken());
 
-    const saveToken = (userToken: UserToken) => {
-        localStorage.setItem('token', JSON.stringify(userToken));
-        setToken(userToken.token);
+    const saveToken = (userToken: DTO.SignInResponseTO | undefined) => {
+        if (userToken) {
+            localStorage.setItem('token', JSON.stringify(userToken));
+        } else {
+            localStorage.removeItem('token');
+        }
+
+        setToken(userToken);
     };
 
     return {

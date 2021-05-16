@@ -10,7 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import {Dispatch, useState} from "react";
-import {UserToken} from "../useToken";
+import {api} from "../utils/http";
+import {getToken} from "../useToken";
 
 const useStyles = makeStyles((theme: Theme) => ({
     appBar: {
@@ -25,7 +26,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-const Header = ({setToken}: { setToken: Dispatch<UserToken> }) => {
+async function logout(token: string): Promise<void> {
+    return api.post<DTO.RefreshTokenRequestTO, void>("/auth/signout", {
+        token: token
+    }).then(() => {
+    });
+}
+
+const Header = ({setToken}: { setToken: Dispatch<DTO.SignInResponseTO | undefined> }) => {
     const classes = useStyles();
     const {isOpened, toggleIsOpened} = useDrawerContext();
 
@@ -41,10 +49,12 @@ const Header = ({setToken}: { setToken: Dispatch<UserToken> }) => {
 
     let open = Boolean(anchorEl);
 
-    const handleMenuLogout = () => {
-        setToken({
-            token: ""
-        });
+    const handleMenuLogout = async () => {
+        const token = getToken();
+        if (token) {
+            await logout(token.token);
+            setToken(undefined);
+        }
     }
 
     return (

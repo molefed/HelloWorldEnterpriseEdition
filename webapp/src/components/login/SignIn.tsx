@@ -13,9 +13,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {makeStyles, Theme} from "@material-ui/core/styles";
-import {UserToken} from "../../useToken";
 import {Copyright} from "./Copyright";
-import {api} from "./../../utils/http";
+import {api} from "../../utils/http";
 
 const useStyles = makeStyles((theme: Theme) => ({
     topBox: {
@@ -40,18 +39,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 }));
 
-type Credentials = {
-    username: string,
-    password: string
+async function loginUser(credentials: DTO.SignInRequestTO): Promise<DTO.SignInResponseTO> {
+    return api.post<DTO.SignInRequestTO, DTO.SignInResponseTO>("/auth/generateToken", credentials);
 }
 
-async function loginUser(credentials: Credentials): Promise<UserToken | void> {
-    return api.post<Credentials, string>("/api_auth_signin", credentials).then(resp => {
-        return {token: resp}
-    });
-}
-
-export default function SignIn({setToken}: { setToken: Dispatch<UserToken> }) {
+export default function SignIn({setToken}: { setToken: Dispatch<DTO.SignInResponseTO> }) {
     const classes = useStyles();
 
     const [username, setUserName] = useState("");
@@ -59,10 +51,10 @@ export default function SignIn({setToken}: { setToken: Dispatch<UserToken> }) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const token: UserToken | void = await loginUser({
+        const token = await loginUser({
             username,
             password
-        } as Credentials);
+        } as DTO.SignInRequestTO);
 
         if (token) {
             setToken(token);

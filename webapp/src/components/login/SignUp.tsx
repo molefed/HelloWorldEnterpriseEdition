@@ -13,7 +13,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {makeStyles, Theme} from "@material-ui/core/styles";
-import {UserToken} from "../../useToken";
 import {Copyright} from "./Copyright";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,26 +38,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 }));
 
-type Credentials = {
-    username: string,
-    password: string
-}
+// async function loginUser(credentials: Credentials): Promise<UserToken | void> {
+//     return fetch('http://localhost:8085', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(credentials)
+//     })
+//         .then(data => /*data.json()*/ {
+//             return {token: 't123'}
+//         })
+//         .catch(reason => console.log(reason));
+// }
 
-async function loginUser(credentials: Credentials): Promise<UserToken | void> {
-    return fetch('http://localhost:8085', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-    })
-        .then(data => /*data.json()*/ {
-            return {token: 't123'}
-        })
-        .catch(reason => console.log(reason));
-}
-
-export default function SignUp({setToken}: { setToken: Dispatch<UserToken> }) {
+export default function SignUp({setToken}: { setToken: Dispatch<DTO.SignInResponseTO | undefined> }) {
     const classes = useStyles();
 
     // const [username, setUserName] = useState("");
@@ -66,14 +60,14 @@ export default function SignUp({setToken}: { setToken: Dispatch<UserToken> }) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const token: UserToken | void = await loginUser({
-            // username,
-            // password
-        } as Credentials);
-
-        if (token) {
-            setToken(token);
-        }
+        // const token: UserToken | void = await loginUser({
+        //     // username,
+        //     // password
+        // } as Credentials);
+        //
+        // if (token) {
+        //     setToken(token);
+        // }
     }
 
     return (
