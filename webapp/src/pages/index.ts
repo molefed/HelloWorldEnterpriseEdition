@@ -1,6 +1,6 @@
 import DashboardPage from "./dashboard";
 import OrdersPage from "./orders";
-import CustomersPage from "./customers";
 import InventoryPage from "./inventory";
+import UsersPage from "./user-page";
 
-export { DashboardPage, OrdersPage, CustomersPage, InventoryPage };
+export { DashboardPage, OrdersPage, UsersPage, InventoryPage };

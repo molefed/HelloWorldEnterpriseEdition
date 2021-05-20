@@ -2,6 +2,7 @@ package ru.molefed.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,13 @@ public class UserService {
     public List<AppUser> getAll(Integer page, Integer size) {
         return appUserRepository.findByDeleted(false,
                 PageRequest.of(page, size, Sort.Direction.ASC, "id"));
+    }
+
+    public List<AppUser> search(String pattern) {
+        String searchPattern = StringUtils.isEmpty(pattern) ? "%" : "%" + pattern + "%";
+
+        return appUserRepository.search(searchPattern,
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "name")));
     }
 
     public AppUser get(long id) {

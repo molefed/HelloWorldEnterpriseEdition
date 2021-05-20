@@ -17,7 +17,7 @@ export const DRAWER_LIST: DrawerItem[] = [
     Icon: ShoppingCartIcon,
   },
   {
-    route: ROUTES.customers,
+    route: ROUTES.users,
     literal: 'Customers',
     Icon: PeopleIcon,
   },

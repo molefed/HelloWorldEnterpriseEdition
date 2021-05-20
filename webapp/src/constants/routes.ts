@@ -1,6 +1,6 @@
 export const ROUTES = {
   main: "/dashboard",
   orders: "/orders",
-  customers: "/customers",
+  users: "/users",
   inventory: "/inventory",
 };

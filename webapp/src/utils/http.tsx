@@ -3,6 +3,7 @@ import {getToken} from "../useToken";
 import React, {Dispatch, useEffect, useState} from "react";
 import {Backdrop, CircularProgress} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
+import ErrorDialog from '../components/dialog/ErrorDialog';
 
 const baseURL = "http://localhost:9090";
 
@@ -26,21 +27,31 @@ const useStyles = makeStyles((theme) => ({
 export function LoadingOverlay() {
     const classes = useStyles();
     const [visibleBackdrop, setVisibleBackdrop] = useState(false);
+    const [errorString, setErrorString] = useState("");
+    const [errorOpen, setErrorOpen] = useState(false);
 
     useEffect(function () {
         apiList.forEach((api) => {
-            tuneApi(api, setVisibleBackdrop);
+            tuneApi(api, setVisibleBackdrop, setErrorString, setErrorOpen);
         });
     }, []);
 
+    const handleErrorClose = () => {
+        setErrorOpen(false);
+    };
+
     return (
-        <Backdrop className={classes.backdrop} open={visibleBackdrop} transitionDuration={1000}>
-            <CircularProgress color="inherit"/>
-        </Backdrop>
+        <div>
+            <ErrorDialog errorString={errorString} open={errorOpen} handleClose={handleErrorClose}/>
+            <Backdrop className={classes.backdrop} open={visibleBackdrop} transitionDuration={1000}>
+                <CircularProgress color="inherit"/>
+            </Backdrop>
+        </div>
     );
 }
 
-function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>) {
+function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>,
+                 setErrorString: Dispatch<string>, setErrorOpen: Dispatch<boolean>) {
     asiosInst.interceptors.request.use(function (config) {
         setVisibleBackdrop(true);
 
@@ -57,17 +68,23 @@ function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>
 
     asiosInst.interceptors.response.use(function (response) {
         setVisibleBackdrop(false);
-
-        const data: DTO.ExceptionResponseTO = response.data;
-        console.log(data.message);
-
-        if (response.status == 401) { // username\password error
-
-        }
-
-        return response;
+        return response.data;
     }, function (error) {
         setVisibleBackdrop(false);
+
+        const response = error.response;
+        if (response) {
+            if (response.status !== 200) {
+                const data: DTO.ExceptionResponseTO = response.data;
+                if (data) {
+                    if (data.message) {
+                        setErrorOpen(true);
+                        setErrorString(data.message);
+                    }
+                }
+            }
+        }
+
         return Promise.reject(error);
     });
 

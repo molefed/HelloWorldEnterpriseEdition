@@ -1,5 +1,7 @@
 package ru.molefed.db.repo.user;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +11,7 @@ import ru.molefed.db.entity.user.AppUser;
 import ru.molefed.db.repo.EntityFakeDeletedWithNameAndIdRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long>, EntityFakeDeletedWithNameAndIdRepository<AppUser> {
@@ -17,5 +20,8 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long>, EntityF
     @Query("UPDATE AppUser SET lastLogin=:lastLogin WHERE name = :userName")
     void updateLastLogin(@Param("userName") String userName,
                          @Param("lastLogin") LocalDateTime lastLogin);
+
+    @Query("select u from AppUser u join fetch u.roles WHERE u.name like :pattern")
+    List<AppUser> search(@Param("pattern") String pattern, Pageable pageable);
 
 }

@@ -43,7 +43,11 @@ async function loginUser(credentials: DTO.SignInRequestTO): Promise<DTO.SignInRe
     return api.post<DTO.SignInRequestTO, DTO.SignInResponseTO>("/auth/generateToken", credentials);
 }
 
-export default function SignIn({setToken}: { setToken: Dispatch<DTO.SignInResponseTO> }) {
+type SignInProps = {
+    setToken: Dispatch<DTO.SignInResponseTO>
+}
+
+export default function SignIn(props: SignInProps) {
     const classes = useStyles();
 
     const [username, setUserName] = useState("");
@@ -57,7 +61,7 @@ export default function SignIn({setToken}: { setToken: Dispatch<DTO.SignInRespon
         } as DTO.SignInRequestTO);
 
         if (token) {
-            setToken(token);
+            props.setToken(token);
         }
     }
 
