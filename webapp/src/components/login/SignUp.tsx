@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 //         .catch(reason => console.log(reason));
 // }
 
-export default function SignUp({setToken}: { setToken: Dispatch<DTO.SignInResponseTO | undefined> }) {
+export default function SignUp() {
     const classes = useStyles();
 
     // const [username, setUserName] = useState("");

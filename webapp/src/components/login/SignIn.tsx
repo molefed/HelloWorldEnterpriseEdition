@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Dispatch, useState} from 'react';
+import {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import {Copyright} from "./Copyright";
 import {api} from "../../utils/http";
+import {setToken, TokenInfo} from '../../service/TokenFolderService';
 
 const useStyles = makeStyles((theme: Theme) => ({
     topBox: {
@@ -43,11 +44,7 @@ async function loginUser(credentials: DTO.SignInRequestTO): Promise<DTO.SignInRe
     return api.post<DTO.SignInRequestTO, DTO.SignInResponseTO>("/auth/generateToken", credentials);
 }
 
-type SignInProps = {
-    setToken: Dispatch<DTO.SignInResponseTO>
-}
-
-export default function SignIn(props: SignInProps) {
+export default function SignIn() {
     const classes = useStyles();
 
     const [username, setUserName] = useState("");
@@ -58,10 +55,11 @@ export default function SignIn(props: SignInProps) {
         const token = await loginUser({
             username,
             password
-        } as DTO.SignInRequestTO);
+        });
 
         if (token) {
-            props.setToken(token);
+            setToken(token as TokenInfo);
+            window.location.reload();
         }
     }
 

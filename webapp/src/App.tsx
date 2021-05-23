@@ -5,23 +5,23 @@ import Layout from "./components/Layout";
 import {DashboardPage, InventoryPage, OrdersPage, UsersPage,} from "./pages";
 import SignIn from './components/login/SignIn';
 import SignUp from './components/login/SignUp';
-import useToken from './useToken';
+import {getToken} from './service/TokenFolderService';
 
 export default function App() {
-    const {token, setToken} = useToken();
+    const token = getToken();
 
     if (!token) {
         return (
             <Switch>
                 <Route path="/" exact render={() => <Redirect to={"/signin"}/>}/>
-                <Route exact path="/signin" component={() => <SignIn setToken={setToken}/>}/>
-                <Route exact path="/signup" component={() => <SignUp setToken={setToken}/>}/>
+                <Route exact path="/signin" component={() => <SignIn />}/>
+                <Route exact path="/signup" component={() => <SignUp />}/>
             </Switch>
         );
     }
 
     return (
-        <Layout setToken={setToken}>
+        <Layout>
             <Switch>
                 <Route path="/" exact render={() => <Redirect to={ROUTES.main}/>}/>
                 <Route exact path={ROUTES.main} component={DashboardPage}/>

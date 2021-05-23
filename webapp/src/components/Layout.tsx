@@ -1,4 +1,4 @@
-import React, {Dispatch, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 
 import Header from "./Header";
@@ -26,19 +26,17 @@ const useStyles = makeStyles(() => ({
 
 type Props = {
     children: NonNullable<ReactNode>;
-    setToken: Dispatch<DTO.SignInResponseTO | undefined>
 };
 
 const Layout: React.FC<Props> = ({
-                                     children,
-                                     setToken
+                                     children
                                  }) => {
     const classes = useStyles();
 
     return (
         <DrawerContextProvider>
             <div className={classes.root}>
-                <Header setToken={setToken}/>
+                <Header/>
                 <Toolbar/>
                 <div className={classes.container}>
                     <Drawer/>

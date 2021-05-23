@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from "axios";
-import {getToken} from "../useToken";
+import {getToken, refreshToken, setToken} from "../service/TokenFolderService";
 import React, {Dispatch, useEffect, useState} from "react";
 import {Backdrop, CircularProgress} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
@@ -7,13 +7,18 @@ import ErrorDialog from '../components/dialog/ErrorDialog';
 
 const baseURL = "http://localhost:9090";
 
-export const api = axios.create({
-    baseURL: baseURL,
-    headers: {
-        'Content-Type': 'application/json;charset=UTF-8'
-    },
-    responseType: "json",
-});
+export const api = axiosCreate();
+
+function axiosCreate() {
+    return axios.create({
+        baseURL: baseURL,
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+        },
+        responseType: "json",
+    });
+}
+
 
 const apiList = [api];
 
@@ -52,11 +57,21 @@ export function LoadingOverlay() {
 
 function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>,
                  setErrorString: Dispatch<string>, setErrorOpen: Dispatch<boolean>) {
-    asiosInst.interceptors.request.use(function (config) {
+    asiosInst.interceptors.request.use(async function (config) {
         setVisibleBackdrop(true);
 
-        const token = getToken();
+        let token = getToken();
         if (token) {
+            const nowTime = new Date().getTime();
+            if (token.refreshExpiresTime < nowTime) {
+                setToken(undefined);
+                window.location.reload();
+            }
+            else if (token.expiresTime < nowTime) {
+                let refreshTokenResponseTO = await refreshTokenPost({token: token.refreshToken});
+                token = refreshToken(refreshTokenResponseTO);
+            }
+
             config.headers.Authorization = `Bearer ${token.token}`
         }
 
@@ -89,3 +104,8 @@ function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>
     });
 
 }
+
+async function refreshTokenPost(requestTO: DTO.RefreshTokenRequestTO): Promise<DTO.RefreshTokenResponseTO> {
+    return axiosCreate().post<DTO.RefreshTokenRequestTO, DTO.RefreshTokenResponseTO>("/auth/refreshToken", requestTO);
+}
+

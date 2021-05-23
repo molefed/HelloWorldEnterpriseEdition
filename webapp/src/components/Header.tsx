@@ -9,9 +9,9 @@ import {useDrawerContext} from "../contexts/drawer-context";
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import {Dispatch, useState} from "react";
+import {useState} from "react";
 import {api} from "../utils/http";
-import {getToken} from "../useToken";
+import {setToken, getToken} from "../service/TokenFolderService";
 
 const useStyles = makeStyles((theme: Theme) => ({
     appBar: {
@@ -30,10 +30,11 @@ async function logout(token: string): Promise<void> {
     return api.post<DTO.RefreshTokenRequestTO, void>("/auth/signout", {
         token: token
     }).then(() => {
+        window.location.reload();
     });
 }
 
-const Header = ({setToken}: { setToken: Dispatch<DTO.SignInResponseTO | undefined> }) => {
+const Header = () => {
     const classes = useStyles();
     const {isOpened, toggleIsOpened} = useDrawerContext();
 
