@@ -30,17 +30,17 @@ export function refreshToken(refreshToken: DTO.RefreshTokenResponseTO): TokenInf
         return token;
     }
 
-    throw Error("");
+    throw Error("Not store token");
 }
 
 function calcExpiredDates(userToken: TokenInfo) {
-    const dif = 1000 * 15;
-    userToken.expiresTime = calcExpiredDateTime(userToken.expiresIn, dif);
-    userToken.refreshExpiresTime = calcExpiredDateTime(userToken.refreshExpiresIn, dif);
+    const difInSec = 5;
+    userToken.expiresTime = calcExpiredDateTime(userToken.expiresIn, difInSec);
+    userToken.refreshExpiresTime = calcExpiredDateTime(userToken.refreshExpiresIn, difInSec);
 }
 
-function calcExpiredDateTime(expiresIn: number, dif: number) {
-    const date = new Date();
-    date.setSeconds(date.getSeconds() + expiresIn - dif);
-    return date.getTime();
+function calcExpiredDateTime(expiresIn: number, difInSec: number) {
+    const now = new Date();
+    now.setSeconds(now.getSeconds() + expiresIn - difInSec);
+    return now.getTime();
 }
