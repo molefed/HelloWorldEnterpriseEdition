@@ -1,48 +1,44 @@
 package ru.molefed.db.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @MappedSuperclass
+@NoArgsConstructor
+@Getter
+@Setter
 public class AEntityWithId implements EntityWithId {
-    public static final String ID = "id";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = AEntityWithId.ID)
-    protected Long id;
+	public static final String ID = "id";
 
-    public AEntityWithId() {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = AEntityWithId.ID)
+	protected Long id;
 
-    }
+	@Override
+	public int hashCode() {
+		return getId() == null ? super.hashCode() : getId().intValue();
+	}
 
-    public AEntityWithId(Long id) {
-        setId(id);
-    }
+	@Override
+	public boolean equals(Object that) {
+		if (that == null) {
+			return false;
+		}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+		if (getClass() != that.getClass()) {
+			return false;
+		}
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+		if (getId() == null) {
+			return super.equals(that);
+		}
 
-    @Override
-    public int hashCode() {
-        return getId() == null ? super.hashCode() : getId().intValue();
-    }
-
-    @Override
-    public boolean equals(Object that) {
-        if (getId() == null || !(that instanceof EntityWithId)) {
-            return super.equals(that);
-        }
-
-        EntityWithId entityWithId = (EntityWithId) that;
-        return getId().equals(entityWithId.getId());
-    }
-
-
+		EntityWithId entityWithId = (EntityWithId) that;
+		return getId().equals(entityWithId.getId());
+	}
 }

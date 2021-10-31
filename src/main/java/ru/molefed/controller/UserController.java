@@ -1,6 +1,6 @@
 package ru.molefed.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.molefed.controller.dto.AppUserDto;
@@ -16,52 +16,46 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
-    private final AppUserMapper appUserMapper;
+	private final UserService userService;
+	private final AppUserMapper appUserMapper;
 
-    @Autowired
-    public UserController(UserService userService, AppUserMapper appUserMapper) {
-        this.userService = userService;
-        this.appUserMapper = appUserMapper;
-    }
+	@CanManageUsers
+	@GetMapping(value = "/all", params = {"page", "size"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public List<AppUserDto> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
+		return appUserMapper.toDtos(userService.getAll(page, size));
+	}
 
-    @CanManageUsers
-    @GetMapping(value = "/all", params = {"page", "size"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<AppUserDto> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return appUserMapper.toDtos(userService.getAll(page, size));
-    }
+	@CanManageUsers
+	@PostMapping(value = "/search")
+	public List<AppUserDto> search(@RequestBody SearchAppUserDTO searchAppUserDTO) {
+		return appUserMapper.toDtos(userService.search(searchAppUserDTO.getPattern()));
+	}
 
-    @CanManageUsers
-    @PostMapping(value = "/search")
-    public List<AppUserDto> search(@RequestBody SearchAppUserDTO searchAppUserDTO) {
-        return appUserMapper.toDtos(userService.search(searchAppUserDTO.getPattern()));
-    }
+	@CanManageUsers
+	@GetMapping("/get/{id}")
+	public AppUserDto get(@PathVariable long id) {
+		return appUserMapper.toDto(userService.get(id));
+	}
 
-    @CanManageUsers
-    @GetMapping("/get/{id}")
-    public AppUserDto get(@PathVariable long id) {
-        return appUserMapper.toDto(userService.get(id));
-    }
+	@PermitAuthenticated
+	@GetMapping("/current")
+	public AppUserDto current(Principal principal) {
+		return appUserMapper.toDto(userService.get(principal.getName()));
+	}
 
-    @PermitAuthenticated
-    @GetMapping("/current")
-    public AppUserDto current(Principal principal) {
-        return appUserMapper.toDto(userService.get(principal.getName()));
-    }
+	@CanManageUsers
+	@PostMapping(value = "/save")
+	public AppUserDto save(@RequestBody AppUserDto userDto) {
+		AppUser user = userService.save(appUserMapper.toDomain(userDto), userDto.getPassword());
+		return appUserMapper.toDto(user);
+	}
 
-    @CanManageUsers
-    @PostMapping(value = "/save")
-    public AppUserDto save(@RequestBody AppUserDto userDto) {
-        AppUser user = userService.save(appUserMapper.toDomain(userDto), userDto.getPassword());
-        return appUserMapper.toDto(user);
-    }
-
-    @CanManageUsers
-    @GetMapping("/delete/{id}")
-    public void delete(@PathVariable long id) {
-        userService.delete(id);
-    }
-
+	@CanManageUsers
+	@GetMapping("/delete/{id}")
+	public void delete(@PathVariable long id) {
+		userService.delete(id);
+	}
 }

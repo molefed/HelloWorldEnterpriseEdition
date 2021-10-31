@@ -1,35 +1,14 @@
 package ru.molefed.controller.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import ru.molefed.db.entity.AEntityWithNameAndId;
 
-@SuppressWarnings("unused")
+@Getter
+@Setter
 public class SignInResponseTO extends RefreshTokenResponseTO {
-    private AEntityWithNameAndId user;
-    private String refreshToken;
-    protected long refreshExpiresIn;
 
-    public AEntityWithNameAndId getUser() {
-        return user;
-    }
-
-    public void setUser(AEntityWithNameAndId user) {
-        this.user = user;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    public long getRefreshExpiresIn() {
-        return refreshExpiresIn;
-    }
-
-    public void setRefreshExpiresIn(long refreshExpiresIn) {
-        this.refreshExpiresIn = refreshExpiresIn;
-    }
-
+	private AEntityWithNameAndId user;
+	private String refreshToken;
+	protected long refreshExpiresIn;
 }

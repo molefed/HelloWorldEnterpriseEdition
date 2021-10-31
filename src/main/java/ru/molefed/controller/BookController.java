@@ -1,6 +1,6 @@
 package ru.molefed.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.molefed.controller.dto.BookDto;
@@ -11,28 +11,26 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/books")
+@RequiredArgsConstructor
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+	private final BookService bookService;
 
-    @CanManageBooks
-    @GetMapping(value = "/all", params = {"page", "size"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<BookDto> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return bookService.getAll(page, size);
-    }
+	@CanManageBooks
+	@GetMapping(value = "/all", params = {"page", "size"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public List<BookDto> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
+		return bookService.getAll(page, size);
+	}
 
-    @CanManageBooks
-    @PostMapping(value = "/save")
-    public BookDto saveBooks(@RequestBody BookDto bookDto) {
-        return bookService.saveBooks(bookDto);
-    }
+	@CanManageBooks
+	@PostMapping(value = "/save")
+	public BookDto saveBooks(@RequestBody BookDto bookDto) {
+		return bookService.saveBooks(bookDto);
+	}
 
-    @CanManageBooks
-    @GetMapping("/delete/{id}")
-    public void delete(@PathVariable long id) {
-        bookService.delete(id);
-    }
-
-
+	@CanManageBooks
+	@GetMapping("/delete/{id}")
+	public void delete(@PathVariable long id) {
+		bookService.delete(id);
+	}
 }

@@ -1,6 +1,6 @@
 package ru.molefed;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,32 +17,27 @@ import ru.molefed.security.JwtBearerFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @ComponentScan("ru.molefed.security")
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtBearerFilter jwtBearerFilter;
+	private final JwtBearerFilter jwtBearerFilter;
 
-    @Autowired
-    public WebSecurityConfig(JwtBearerFilter jwtBearerFilter) {
-        this.jwtBearerFilter = jwtBearerFilter;
-    }
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable()
+				.httpBasic().disable()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and().authorizeRequests()
+				.antMatchers("/", "/auth/**").permitAll()
+				.antMatchers("/userInfo").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+				.antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
+				.and().exceptionHandling().accessDeniedPage("/403");
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .httpBasic().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests()
-                .antMatchers("/", "/auth/**").permitAll()
-                .antMatchers("/userInfo").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-                .antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
-                .and().exceptionHandling().accessDeniedPage("/403");
-
-        http.addFilterBefore(jwtBearerFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
+		http.addFilterBefore(jwtBearerFilter, UsernamePasswordAuthenticationFilter.class);
+	}
 }

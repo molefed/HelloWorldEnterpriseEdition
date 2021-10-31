@@ -86,6 +86,7 @@ task copyWebappToBuild(type: Copy, dependsOn: 'webappNpmBuild') {
 ext {
     mapstructVersion = '1.4.2.Final'
     jupiterVersion = '5.7.1'
+    lombokVersion = '1.18.22'
 }
 
 dependencies {
@@ -96,9 +97,8 @@ dependencies {
     implementation 'org.javassist:javassist:3.27.0-GA' // run tests after remove it
     implementation 'org.liquibase:liquibase-core:4.3.2'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
-
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    implementation "org.projectlombok:lombok:${lombokVersion}"
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
@@ -109,6 +109,9 @@ dependencies {
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:${jupiterVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${jupiterVersion}"
+
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 }
 
 test {

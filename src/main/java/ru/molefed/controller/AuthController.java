@@ -1,6 +1,6 @@
 package ru.molefed.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,67 +20,60 @@ import ru.molefed.service.UserService;
 
 @RestController
 @RequestMapping(value = "/auth", method = RequestMethod.POST)
+@RequiredArgsConstructor
 public class AuthController {
-    private final UserService userService;
-    private final JwtProvider jwtProvider;
-    private final AuthMapper authMapper;
-    private final RefreshTokenService refreshTokenService;
 
-    @Autowired
-    public AuthController(UserService userService, JwtProvider jwtProvider, AuthMapper authMapper, RefreshTokenService refreshTokenService) {
-        this.userService = userService;
-        this.jwtProvider = jwtProvider;
-        this.authMapper = authMapper;
-        this.refreshTokenService = refreshTokenService;
-    }
+	private final UserService userService;
+	private final JwtProvider jwtProvider;
+	private final AuthMapper authMapper;
+	private final RefreshTokenService refreshTokenService;
 
-    @Transactional
-    @RequestMapping("/generateToken")
-    public SignInResponseTO generateToken(@RequestBody SignInRequestTO requestTO) {
-        AppUser appUser = userService.get(requestTO.getUsername());
-        if (appUser == null || !userService.isPasswordValid(appUser, requestTO.getPassword())) {
-            throw new BadCredentialsException("Invalid username or password");
-        }
+	@Transactional
+	@RequestMapping("/generateToken")
+	public SignInResponseTO generateToken(@RequestBody SignInRequestTO requestTO) {
+		AppUser appUser = userService.get(requestTO.getUsername());
+		if (appUser == null || !userService.isPasswordValid(appUser, requestTO.getPassword())) {
+			throw new BadCredentialsException("Invalid username or password");
+		}
 
-        checkUserValid(appUser);
+		checkUserValid(appUser);
 
-        JwtProvider.TokenInfo tokenInfo = jwtProvider.generateToken(appUser);
-        JwtProvider.TokenInfo refreshTokenInfo = jwtProvider.generateRefreshToken(appUser);
+		JwtProvider.TokenInfo tokenInfo = jwtProvider.generateToken(appUser);
+		JwtProvider.TokenInfo refreshTokenInfo = jwtProvider.generateRefreshToken(appUser);
 
-        return authMapper.signin(appUser,
-                tokenInfo.getToken(),
-                tokenInfo.getExpiresInSec(),
-                refreshTokenInfo.getToken(),
-                refreshTokenInfo.getExpiresInSec());
-    }
+		return authMapper.signin(appUser,
+								 tokenInfo.getToken(),
+								 tokenInfo.getExpiresInSec(),
+								 refreshTokenInfo.getToken(),
+								 refreshTokenInfo.getExpiresInSec());
+	}
 
-    @Transactional(readOnly = true)
-    @RequestMapping("/refreshToken")
-    public RefreshTokenResponseTO refreshToken(@RequestBody RefreshTokenRequestTO refreshTokenRequestTO) {
-        RefreshToken refreshToken = refreshTokenService.getValidToken(refreshTokenRequestTO.getToken());
+	@Transactional(readOnly = true)
+	@RequestMapping("/refreshToken")
+	public RefreshTokenResponseTO refreshToken(@RequestBody RefreshTokenRequestTO refreshTokenRequestTO) {
+		RefreshToken refreshToken = refreshTokenService.getValidToken(refreshTokenRequestTO.getToken());
 
-        if (refreshToken == null) {
-            throw new BadCredentialsException("Invalid refresh token");
-        }
+		if (refreshToken == null) {
+			throw new BadCredentialsException("Invalid refresh token");
+		}
 
-        checkUserValid(refreshToken.getAppUser());
+		checkUserValid(refreshToken.getAppUser());
 
-        JwtProvider.TokenInfo tokenInfo = jwtProvider.generateToken(refreshToken.getAppUser());
+		JwtProvider.TokenInfo tokenInfo = jwtProvider.generateToken(refreshToken.getAppUser());
 
-        return authMapper.refrershTokenResponseTO(
-                tokenInfo.getToken(),
-                tokenInfo.getExpiresInSec());
-    }
+		return authMapper.refrershTokenResponseTO(
+				tokenInfo.getToken(),
+				tokenInfo.getExpiresInSec());
+	}
 
-    @RequestMapping("/signout")
-    public void signout(@RequestBody RefreshTokenRequestTO refreshTokenRequestTO) {
-        refreshTokenService.deleteAllUsersToken(refreshTokenRequestTO.getToken());
-    }
+	@RequestMapping("/signout")
+	public void signout(@RequestBody RefreshTokenRequestTO refreshTokenRequestTO) {
+		refreshTokenService.deleteAllUsersToken(refreshTokenRequestTO.getToken());
+	}
 
-    private void checkUserValid(AppUser appUser) {
-        if (appUser.isDeleted()) {
-            throw new BadCredentialsException("User deleted");
-        }
-    }
-
+	private void checkUserValid(AppUser appUser) {
+		if (appUser.isDeleted()) {
+			throw new BadCredentialsException("User deleted");
+		}
+	}
 }

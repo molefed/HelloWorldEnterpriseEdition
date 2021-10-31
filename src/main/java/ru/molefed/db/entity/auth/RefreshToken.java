@@ -1,5 +1,8 @@
 package ru.molefed.db.entity.auth;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.molefed.db.entity.user.AppUser;
 
 import javax.persistence.*;
@@ -7,38 +10,17 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "HWEE_REFRESH_TOKEN")
+@NoArgsConstructor
+@Getter
+@Setter
 public class RefreshToken {
-    @Id
-    @Column(name = "TOKEN")
-    private String token;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private AppUser appUser;
-    @Column(name = "EXPIRES_DATE")
-    private LocalDateTime expiresDate;
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
-    public LocalDateTime getExpiresDate() {
-        return expiresDate;
-    }
-
-    public void setExpiresDate(LocalDateTime expiresDate) {
-        this.expiresDate = expiresDate;
-    }
-
+	@Id
+	@Column(name = "TOKEN")
+	private String token;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "USER_ID")
+	private AppUser appUser;
+	@Column(name = "EXPIRES_DATE")
+	private LocalDateTime expiresDate;
 }

@@ -1,5 +1,9 @@
 package ru.molefed.db.entity.user;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import ru.molefed.db.entity.AEntityWithNameAndId;
 
 import javax.persistence.Entity;
@@ -12,21 +16,10 @@ import java.util.Set;
 @Table(name = "HWEE_ROLE"/*,
         uniqueConstraints = {
                 @UniqueConstraint(name = "AppRoleNameUK", columnNames = AEntityWithNameAndId.NAME) }*/)
+@NoArgsConstructor
+@Getter
 public class AppRole extends AEntityWithNameAndId {
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<AppUser> users = new HashSet<>();
-
-    public AppRole() {
-
-    }
-
-    public AppRole(String name) {
-        super(name);
-    }
-
-    public Set<AppUser> getUsers() {
-        return users;
-    }
-
+	@ManyToMany(mappedBy = "roles")
+	private final Set<AppUser> users = new HashSet<>();
 }

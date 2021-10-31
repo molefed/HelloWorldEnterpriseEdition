@@ -1,15 +1,11 @@
 package ru.molefed.controller.dto;
 
-@SuppressWarnings("unused")
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class RefreshTokenRequestTO {
-    private String token;
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
+	private String token;
 }

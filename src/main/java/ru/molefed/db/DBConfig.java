@@ -23,9 +23,6 @@ import javax.sql.DataSource;
 )
 public class DBConfig {
 
-    public DBConfig() {
-    }
-
     @Primary
     @Bean(name = "dataSource")
     @ConfigurationProperties(prefix = "spring.datasource")

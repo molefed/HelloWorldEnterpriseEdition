@@ -1,6 +1,6 @@
 package ru.molefed.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,43 +11,40 @@ import ru.molefed.db.repo.auth.RefreshTokenRepository;
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class RefreshTokenService {
-    private final RefreshTokenRepository refreshTokenRepository;
 
-    @Autowired
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository) {
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
+	private final RefreshTokenRepository refreshTokenRepository;
 
-    @Transactional
-    public void saveNew(String token, AppUser user, LocalDateTime expiresDate) {
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setToken(token);
-        refreshToken.setAppUser(user);
-        refreshToken.setExpiresDate(expiresDate);
-        refreshTokenRepository.save(refreshToken);
-    }
 
-    @Transactional
-    public void deleteAllUsersToken(String token) {
-        refreshTokenRepository.deleteToken(token);
-    }
+	@Transactional
+	public void saveNew(String token, AppUser user, LocalDateTime expiresDate) {
+		RefreshToken refreshToken = new RefreshToken();
+		refreshToken.setToken(token);
+		refreshToken.setAppUser(user);
+		refreshToken.setExpiresDate(expiresDate);
+		refreshTokenRepository.save(refreshToken);
+	}
 
-    @Transactional(readOnly = true)
-    public RefreshToken getValidToken(String token) {
-        RefreshToken refreshToken = refreshTokenRepository.findById(token).orElse(null);
-        if (refreshToken != null) {
-            if (refreshToken.getExpiresDate().isBefore(LocalDateTime.now())) {
-                return refreshToken;
-            }
-        }
-        return null;
-    }
+	@Transactional
+	public void deleteAllUsersToken(String token) {
+		refreshTokenRepository.deleteToken(token);
+	}
 
-    @Transactional
-    @Scheduled(cron = "0 0/30 * * * *") // every 30 min
-    public void deleteOldTokens() {
-        refreshTokenRepository.deleteOldTokens(LocalDateTime.now());
-    }
+	@Transactional(readOnly = true)
+	public RefreshToken getValidToken(String token) {
+		RefreshToken refreshToken = refreshTokenRepository.findById(token).orElse(null);
+		if (refreshToken != null) {
+			if (refreshToken.getExpiresDate().isBefore(LocalDateTime.now())) {
+				return refreshToken;
+			}
+		}
+		return null;
+	}
 
+	@Transactional
+	@Scheduled(cron = "0 0/30 * * * *") // every 30 min
+	public void deleteOldTokens() {
+		refreshTokenRepository.deleteOldTokens(LocalDateTime.now());
+	}
 }

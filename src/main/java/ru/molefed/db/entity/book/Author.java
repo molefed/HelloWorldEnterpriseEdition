@@ -1,6 +1,9 @@
 package ru.molefed.db.entity.book;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.molefed.db.entity.AEntityWithNameAndId;
 
 import javax.persistence.CascadeType;
@@ -12,26 +15,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "HWEE_AUTHOR")
+@NoArgsConstructor
+@Getter
+@Setter
 public class Author extends AEntityWithNameAndId {
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL /*{CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}*/)
-    private Set<Book> books = new HashSet<>(0);
-
-    public Author() {
-
-    }
-
-    public Author(String name) {
-        super(name);
-    }
-
-    public Set<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(Set<Book> books) {
-        this.books = books;
-    }
-
+	@JsonIgnore
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL /*{CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}*/)
+	private Set<Book> books = new HashSet<>(0);
 }
