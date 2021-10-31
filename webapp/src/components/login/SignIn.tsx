@@ -14,8 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import {Copyright} from "./Copyright";
-import {api} from "../../utils/http";
-import {setToken, TokenInfo} from '../../service/TokenFolderService';
+import * as authService from '../../service/AuthService';
 
 const useStyles = makeStyles((theme: Theme) => ({
     topBox: {
@@ -40,10 +39,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 }));
 
-async function loginUser(credentials: DTO.SignInRequestTO): Promise<DTO.SignInResponseTO> {
-    return api.post<DTO.SignInRequestTO, DTO.SignInResponseTO>("/auth/generateToken", credentials);
-}
-
 export default function SignIn() {
     const classes = useStyles();
 
@@ -52,15 +47,8 @@ export default function SignIn() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const token = await loginUser({
-            username,
-            password
-        });
 
-        if (token) {
-            setToken(token as TokenInfo);
-            window.location.reload();
-        }
+        await authService.login(username, password);
     }
 
     return (

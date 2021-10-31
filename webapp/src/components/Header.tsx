@@ -10,8 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import {useState} from "react";
-import {api} from "../utils/http";
-import {setToken, getToken} from "../service/TokenFolderService";
+import * as authService from '../service/AuthService';
 
 const useStyles = makeStyles((theme: Theme) => ({
     appBar: {
@@ -26,17 +25,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-async function logout(token: string): Promise<void> {
-    return api.post<DTO.RefreshTokenRequestTO, void>("/auth/signout", {
-        token: token
-    }).then(() => {
-        window.location.reload();
-    });
-}
-
 const Header = () => {
     const classes = useStyles();
     const {isOpened, toggleIsOpened} = useDrawerContext();
+
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -51,11 +43,7 @@ const Header = () => {
     let open = Boolean(anchorEl);
 
     const handleMenuLogout = async () => {
-        const token = getToken();
-        if (token) {
-            await logout(token.token);
-            setToken(undefined);
-        }
+        await authService.logout();
     }
 
     return (
