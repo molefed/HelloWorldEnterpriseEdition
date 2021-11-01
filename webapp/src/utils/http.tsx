@@ -4,12 +4,13 @@ import React, {Dispatch, useEffect, useState} from "react";
 import {Backdrop, CircularProgress} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
 import ErrorDialog from '../components/dialog/ErrorDialog';
+import * as authService from '../service/AuthService';
 
 const baseURL = "http://localhost:9090";
 
 export const api = axiosCreate();
 
-function axiosCreate() {
+export function axiosCreate() {
     return axios.create({
         baseURL: baseURL,
         headers: {
@@ -66,9 +67,8 @@ function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>
             if (token.refreshExpiresTime < nowTime) {
                 setToken(undefined);
                 window.location.reload();
-            }
-            else if (token.expiresTime < nowTime) {
-                let refreshTokenResponseTO = await refreshTokenPost({token: token.refreshToken});
+            } else if (token.expiresTime < nowTime) {
+                let refreshTokenResponseTO = await authService.refreshToken(token.refreshToken);
                 token = refreshToken(refreshTokenResponseTO);
             }
 
@@ -103,9 +103,5 @@ function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>
         return Promise.reject(error);
     });
 
-}
-
-async function refreshTokenPost(requestTO: DTO.RefreshTokenRequestTO): Promise<DTO.RefreshTokenResponseTO> {
-    return axiosCreate().post<DTO.RefreshTokenRequestTO, DTO.RefreshTokenResponseTO>("/auth/refreshToken", requestTO);
 }
 

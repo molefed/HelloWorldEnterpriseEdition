@@ -1,5 +1,6 @@
-import {api} from "../utils/http";
+import {api, axiosCreate} from "../utils/http";
 import {getToken, setToken, TokenInfo} from "./TokenFolderService";
+import {AxiosResponse} from "axios";
 
 function goToRootFolder() {
     window.location.href = '/';
@@ -32,4 +33,13 @@ export async function login(username: string, password: string) {
         setToken(token as TokenInfo);
         goToRootFolder();
     }
+}
+
+export async function refreshToken(refreshToken: string): Promise<DTO.RefreshTokenResponseTO> {
+    const response: AxiosResponse = await axiosCreate().post<DTO.RefreshTokenRequestTO, AxiosResponse>(
+        "/auth/refreshToken",
+        {token: refreshToken}
+    );
+
+    return response.data;
 }
