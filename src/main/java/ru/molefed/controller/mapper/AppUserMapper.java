@@ -10,10 +10,9 @@ import ru.molefed.persister.entity.user.AppRole;
 import ru.molefed.persister.entity.user.AppUser;
 import ru.molefed.persister.repository.user.AppRoleRepository;
 import ru.molefed.persister.repository.user.AppUserRepository;
+import ru.molefed.utils.CollectionMerger;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Mapper(uses = {AppRoleMapper.class})
 public abstract class AppUserMapper {
@@ -34,29 +33,25 @@ public abstract class AppUserMapper {
 
 	public AppUser toDomain(AppUserDto userDto) {
 		AppUser user = userDto.getId() == null ?
-				new AppUser() : appUserRepository.findById(userDto.getId()).get();
+				new AppUser() : appUserRepository.findById(userDto.getId()).orElseThrow();
 		user.setId(userDto.getId());
 		user.setName(userDto.getName());
 
-		//TODO: 30.04.2019 переписать на универсальный мерджинг
-		Set<AppRole> rolesDto = new HashSet<>();
-		Set<AppRole> roles = new HashSet<>();
-		for (String roleName : userDto.getRoles()) {
-			AppRole role = appRoleRepository.findByName(roleName);
-			if (role == null) {
-				throw new IllegalArgumentException("Can't find role " + roleName);
+		new CollectionMerger<String, AppRole>() {
+			@Override
+			protected AppRole create(String roleName) {
+				AppRole role = appRoleRepository.findByName(roleName);
+				if (role == null) {
+					throw new IllegalArgumentException("Can't find role " + roleName);
+				}
+				return role;
 			}
-			rolesDto.add(role);
 
-			roles.add(role);
-		}
-		for (AppRole role : new HashSet<>(user.getRoles())) {
-			if (!rolesDto.contains(role)) {
-				roles.remove(role);
+			@Override
+			protected boolean equals(String roleName, AppRole appRole) {
+				return appRole.getName().equals(roleName);
 			}
-		}
-
-		user.setRoles(roles);
+		}.merge(userDto.getRoles(), user.getRoles());
 
 		return user;
 	}

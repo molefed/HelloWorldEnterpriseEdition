@@ -23,5 +23,5 @@ public class AppUserDto extends AEntityWithNameAndId {
 	private String lastName;
 	private Gender gender;
 	private LocalDateTime lastLogin;
-	private Set<String> roles = new HashSet<>();
+	private Set<String> roles;
 }

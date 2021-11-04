@@ -7,7 +7,6 @@ import ru.molefed.persister.entity.AEntityFakeDeletedWithNameAndId;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -44,5 +43,5 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
 			joinColumns = @JoinColumn(name = "USER_ID"),
 			inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
 	)
-	private Set<AppRole> roles = new HashSet<>();
+	private Set<AppRole> roles;
 }
