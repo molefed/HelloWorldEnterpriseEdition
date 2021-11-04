@@ -1,4 +1,4 @@
-package ru.molefed.db.repo;
+package ru.molefed.db.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

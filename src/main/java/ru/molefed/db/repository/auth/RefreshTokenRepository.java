@@ -1,4 +1,4 @@
-package ru.molefed.db.repo.auth;
+package ru.molefed.db.repository.auth;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

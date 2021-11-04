@@ -1,4 +1,4 @@
-package ru.molefed.db.repo;
+package ru.molefed.db.repository;
 
 import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.db.entity.EntityFakeDeletedWithId;

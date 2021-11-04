@@ -1,11 +1,11 @@
-package ru.molefed.db.repo.book;
+package ru.molefed.db.repository.book;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.molefed.db.entity.book.Book;
-import ru.molefed.db.repo.EntityWithIdRepository;
-import ru.molefed.db.repo.FakeDeletedRepository;
+import ru.molefed.db.repository.EntityWithIdRepository;
+import ru.molefed.db.repository.FakeDeletedRepository;
 
 import java.util.List;
 import java.util.Optional;

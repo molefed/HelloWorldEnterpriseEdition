@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.db.entity.auth.RefreshToken;
 import ru.molefed.db.entity.user.AppUser;
-import ru.molefed.db.repo.auth.RefreshTokenRepository;
+import ru.molefed.db.repository.auth.RefreshTokenRepository;
 
 import java.time.LocalDateTime;
 

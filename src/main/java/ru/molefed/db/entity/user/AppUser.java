@@ -39,7 +39,7 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
 	@Column
 	private LocalDateTime lastLogin;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "HWEE_USER_ROLE",
 			joinColumns = @JoinColumn(name = "USER_ID"),
 			inverseJoinColumns = @JoinColumn(name = "ROLE_ID")

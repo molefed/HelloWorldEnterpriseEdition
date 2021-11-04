@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.controller.dto.BookDto;
 import ru.molefed.db.entity.book.Author;
 import ru.molefed.db.entity.book.Book;
-import ru.molefed.db.repo.book.AuthorRepository;
-import ru.molefed.db.repo.book.BookRepository;
+import ru.molefed.db.repository.book.AuthorRepository;
+import ru.molefed.db.repository.book.BookRepository;
 import ru.molefed.utils.EntityWithIdUtils;
 
 import java.util.ArrayList;

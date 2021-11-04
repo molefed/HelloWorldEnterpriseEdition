@@ -1,6 +1,5 @@
 package ru.molefed.db.entity.book;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +19,6 @@ import java.util.Set;
 @Setter
 public class Author extends AEntityWithNameAndId {
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL /*{CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}*/)
+	@OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
 	private Set<Book> books = new HashSet<>(0);
 }

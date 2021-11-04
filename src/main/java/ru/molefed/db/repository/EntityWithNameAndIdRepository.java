@@ -1,4 +1,4 @@
-package ru.molefed.db.repo;
+package ru.molefed.db.repository;
 
 import ru.molefed.db.entity.EntityWithId;
 

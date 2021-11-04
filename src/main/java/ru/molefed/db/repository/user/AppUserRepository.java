@@ -1,14 +1,13 @@
-package ru.molefed.db.repo.user;
+package ru.molefed.db.repository.user;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.molefed.db.entity.user.AppUser;
-import ru.molefed.db.repo.EntityFakeDeletedWithNameAndIdRepository;
+import ru.molefed.db.repository.EntityFakeDeletedWithNameAndIdRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

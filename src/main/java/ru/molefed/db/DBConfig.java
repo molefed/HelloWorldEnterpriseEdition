@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = {"ru.molefed.db.repo"}
+        basePackages = {"ru.molefed.db.repository"}
 )
 public class DBConfig {
 

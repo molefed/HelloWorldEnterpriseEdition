@@ -20,8 +20,8 @@ import ru.molefed.Roles;
 import ru.molefed.db.entity.AEntityWithId;
 import ru.molefed.db.entity.book.Author;
 import ru.molefed.db.entity.book.Book;
-import ru.molefed.db.repo.book.AuthorRepository;
-import ru.molefed.db.repo.book.BookRepository;
+import ru.molefed.db.repository.book.AuthorRepository;
+import ru.molefed.db.repository.book.BookRepository;
 import ru.molefed.controller.dto.BookDto;
 
 import java.time.LocalDate;

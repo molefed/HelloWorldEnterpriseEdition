@@ -8,8 +8,8 @@ import ru.molefed.controller.dto.AppUserDto;
 import ru.molefed.db.entity.AEntityWithNameAndId;
 import ru.molefed.db.entity.user.AppRole;
 import ru.molefed.db.entity.user.AppUser;
-import ru.molefed.db.repo.user.AppRoleRepository;
-import ru.molefed.db.repo.user.AppUserRepository;
+import ru.molefed.db.repository.user.AppRoleRepository;
+import ru.molefed.db.repository.user.AppUserRepository;
 
 import java.util.HashSet;
 import java.util.List;
