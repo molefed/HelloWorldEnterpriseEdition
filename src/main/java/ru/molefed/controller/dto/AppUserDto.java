@@ -2,8 +2,8 @@ package ru.molefed.controller.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.molefed.db.entity.AEntityWithNameAndId;
-import ru.molefed.db.entity.user.Gender;
+import ru.molefed.persister.entity.AEntityWithNameAndId;
+import ru.molefed.persister.entity.user.Gender;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;

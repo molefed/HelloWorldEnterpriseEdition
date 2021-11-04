@@ -2,7 +2,7 @@ package ru.molefed.controller.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.molefed.db.entity.AEntityWithNameAndId;
+import ru.molefed.persister.entity.AEntityWithNameAndId;
 
 @Getter
 @Setter

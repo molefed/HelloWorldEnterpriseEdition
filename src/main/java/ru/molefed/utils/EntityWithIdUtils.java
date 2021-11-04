@@ -1,6 +1,6 @@
 package ru.molefed.utils;
 
-import ru.molefed.db.entity.AEntityWithId;
+import ru.molefed.persister.entity.AEntityWithId;
 
 public class EntityWithIdUtils {
 

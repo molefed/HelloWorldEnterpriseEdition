@@ -9,8 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.molefed.db.entity.user.AppRole;
-import ru.molefed.db.entity.user.AppUser;
+import ru.molefed.persister.entity.user.AppRole;
+import ru.molefed.persister.entity.user.AppUser;
 import ru.molefed.service.RefreshTokenService;
 
 import java.time.LocalDateTime;

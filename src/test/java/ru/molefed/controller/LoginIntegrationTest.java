@@ -23,10 +23,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import ru.molefed.BookApplication;
 import ru.molefed.Roles;
 import ru.molefed.controller.dto.AppUserDto;
-import ru.molefed.db.entity.user.AppRole;
-import ru.molefed.db.entity.user.AppUser;
-import ru.molefed.db.repository.user.AppRoleRepository;
-import ru.molefed.db.repository.user.AppUserRepository;
+import ru.molefed.persister.entity.user.AppRole;
+import ru.molefed.persister.entity.user.AppUser;
+import ru.molefed.persister.repository.user.AppRoleRepository;
+import ru.molefed.persister.repository.user.AppUserRepository;
 import ru.molefed.service.UserService;
 
 import java.util.Set;

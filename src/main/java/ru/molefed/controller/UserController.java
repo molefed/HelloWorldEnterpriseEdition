@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.molefed.controller.dto.AppUserDto;
 import ru.molefed.controller.dto.SearchAppUserDTO;
 import ru.molefed.controller.mapper.AppUserMapper;
-import ru.molefed.db.entity.user.AppUser;
+import ru.molefed.persister.entity.user.AppUser;
 import ru.molefed.security.annotate.CanManageUsers;
 import ru.molefed.security.annotate.PermitAuthenticated;
 import ru.molefed.service.UserService;

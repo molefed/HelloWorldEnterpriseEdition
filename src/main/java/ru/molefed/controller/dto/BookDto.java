@@ -2,8 +2,8 @@ package ru.molefed.controller.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.molefed.db.entity.AEntityWithId;
-import ru.molefed.db.entity.book.Book;
+import ru.molefed.persister.entity.AEntityWithId;
+import ru.molefed.persister.entity.book.Book;
 
 import java.time.LocalDate;
 

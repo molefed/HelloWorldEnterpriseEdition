@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.molefed.controller.dto.RefreshTokenResponseTO;
 import ru.molefed.controller.dto.SignInResponseTO;
-import ru.molefed.db.entity.user.AppUser;
+import ru.molefed.persister.entity.user.AppUser;
 
 @Mapper(uses = {AppUserMapper.class})
 public abstract class AuthMapper {

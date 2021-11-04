@@ -17,11 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import ru.molefed.BookApplication;
 import ru.molefed.Roles;
-import ru.molefed.db.entity.AEntityWithId;
-import ru.molefed.db.entity.book.Author;
-import ru.molefed.db.entity.book.Book;
-import ru.molefed.db.repository.book.AuthorRepository;
-import ru.molefed.db.repository.book.BookRepository;
+import ru.molefed.persister.entity.AEntityWithId;
+import ru.molefed.persister.entity.book.Author;
+import ru.molefed.persister.entity.book.Book;
+import ru.molefed.persister.repository.book.AuthorRepository;
+import ru.molefed.persister.repository.book.BookRepository;
 import ru.molefed.controller.dto.BookDto;
 
 import java.time.LocalDate;

@@ -6,10 +6,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.controller.dto.BookDto;
-import ru.molefed.db.entity.book.Author;
-import ru.molefed.db.entity.book.Book;
-import ru.molefed.db.repository.book.AuthorRepository;
-import ru.molefed.db.repository.book.BookRepository;
+import ru.molefed.persister.entity.book.Author;
+import ru.molefed.persister.entity.book.Book;
+import ru.molefed.persister.repository.book.AuthorRepository;
+import ru.molefed.persister.repository.book.BookRepository;
 import ru.molefed.utils.EntityWithIdUtils;
 
 import java.util.ArrayList;

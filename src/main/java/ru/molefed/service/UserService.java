@@ -6,8 +6,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.molefed.db.entity.user.AppUser;
-import ru.molefed.db.repository.user.AppUserRepository;
+import ru.molefed.persister.entity.user.AppUser;
+import ru.molefed.persister.repository.user.AppUserRepository;
 import ru.molefed.utils.StringUtils;
 
 import java.time.LocalDateTime;

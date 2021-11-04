@@ -5,11 +5,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.molefed.controller.dto.AppUserDto;
-import ru.molefed.db.entity.AEntityWithNameAndId;
-import ru.molefed.db.entity.user.AppRole;
-import ru.molefed.db.entity.user.AppUser;
-import ru.molefed.db.repository.user.AppRoleRepository;
-import ru.molefed.db.repository.user.AppUserRepository;
+import ru.molefed.persister.entity.AEntityWithNameAndId;
+import ru.molefed.persister.entity.user.AppRole;
+import ru.molefed.persister.entity.user.AppUser;
+import ru.molefed.persister.repository.user.AppRoleRepository;
+import ru.molefed.persister.repository.user.AppUserRepository;
 
 import java.util.HashSet;
 import java.util.List;

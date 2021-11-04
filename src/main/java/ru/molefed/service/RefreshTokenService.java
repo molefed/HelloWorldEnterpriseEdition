@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.molefed.db.entity.auth.RefreshToken;
-import ru.molefed.db.entity.user.AppUser;
-import ru.molefed.db.repository.auth.RefreshTokenRepository;
+import ru.molefed.persister.entity.auth.RefreshToken;
+import ru.molefed.persister.entity.user.AppUser;
+import ru.molefed.persister.repository.auth.RefreshTokenRepository;
 
 import java.time.LocalDateTime;
 
