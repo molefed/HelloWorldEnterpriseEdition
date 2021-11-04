@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotBlank;
 
 @MappedSuperclass
 @NoArgsConstructor
@@ -14,5 +15,6 @@ public class AEntityWithNameAndId extends AEntityWithId implements EntityWithNam
 
 	public static final String NAME = "name";
 
+	@NotBlank
 	protected String name;
 }

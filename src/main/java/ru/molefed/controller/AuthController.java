@@ -18,6 +18,8 @@ import ru.molefed.security.JwtProvider;
 import ru.molefed.service.RefreshTokenService;
 import ru.molefed.service.UserService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/auth", method = RequestMethod.POST)
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class AuthController {
 
 	@Transactional
 	@RequestMapping("/generateToken")
-	public SignInResponseTO generateToken(@RequestBody SignInRequestTO requestTO) {
+	public SignInResponseTO generateToken(@RequestBody @Valid SignInRequestTO requestTO) {
 		AppUser appUser = userService.get(requestTO.getUsername());
 		if (appUser == null || !userService.isPasswordValid(appUser, requestTO.getPassword())) {
 			throw new BadCredentialsException("Invalid username or password");
@@ -39,7 +41,9 @@ public class AuthController {
 		checkUserValid(appUser);
 
 		JwtProvider.TokenInfo tokenInfo = jwtProvider.generateToken(appUser);
-		JwtProvider.TokenInfo refreshTokenInfo = jwtProvider.generateRefreshToken(appUser);
+		JwtProvider.TokenInfo refreshTokenInfo = jwtProvider.generateAndSaveRefreshToken(appUser);
+
+		userService.updateLastLogin(appUser.getName());
 
 		return authMapper.signin(appUser,
 								 tokenInfo.getToken(),
@@ -48,9 +52,9 @@ public class AuthController {
 								 refreshTokenInfo.getExpiresInSec());
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	@RequestMapping("/refreshToken")
-	public RefreshTokenResponseTO refreshToken(@RequestBody RefreshTokenRequestTO refreshTokenRequestTO) {
+	public RefreshTokenResponseTO refreshToken(@RequestBody @Valid RefreshTokenRequestTO refreshTokenRequestTO) {
 		RefreshToken refreshToken = refreshTokenService.getValidToken(refreshTokenRequestTO.getToken());
 
 		if (refreshToken == null) {
@@ -61,13 +65,15 @@ public class AuthController {
 
 		JwtProvider.TokenInfo tokenInfo = jwtProvider.generateToken(refreshToken.getAppUser());
 
+		userService.updateLastLogin(refreshToken.getAppUser().getName());
+
 		return authMapper.refrershTokenResponseTO(
 				tokenInfo.getToken(),
 				tokenInfo.getExpiresInSec());
 	}
 
 	@RequestMapping("/signout")
-	public void signout(@RequestBody RefreshTokenRequestTO refreshTokenRequestTO) {
+	public void signout(@RequestBody @Valid RefreshTokenRequestTO refreshTokenRequestTO) {
 		refreshTokenService.deleteAllUsersToken(refreshTokenRequestTO.getToken());
 	}
 

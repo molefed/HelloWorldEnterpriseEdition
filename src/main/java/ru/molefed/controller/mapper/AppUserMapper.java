@@ -38,7 +38,7 @@ public abstract class AppUserMapper {
 		user.setId(userDto.getId());
 		user.setName(userDto.getName());
 
-		// TODO: 30.04.2019 переписать на универсальный мерджинг
+		//TODO: 30.04.2019 переписать на универсальный мерджинг
 		Set<AppRole> rolesDto = new HashSet<>();
 		Set<AppRole> roles = new HashSet<>();
 		for (String roleName : userDto.getRoles()) {

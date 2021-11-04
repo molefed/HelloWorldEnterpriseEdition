@@ -13,7 +13,16 @@
             <column name="NAME" type="varchar(128)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="ENCRYTED_PASSWORD" type="varchar(128)"/>
+            <column name="EMAIL" type="varchar(254)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="ENCRYTED_PASSWORD" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FIRST_NAME" type="varchar(64)"/>
+            <column name="LAST_NAME" type="varchar(64)"/>
+            <column name="BIRTHDAY" type="datetime"/>
+            <column name="GENDER" type="tinyint"/>
             <column name="DELETED" type="boolean"/>
             <column name="LAST_LOGIN" type="datetime"/>
         </createTable>

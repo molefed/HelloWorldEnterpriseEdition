@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 public class RefreshToken {
 
 	@Id
-	@Column(name = "TOKEN")
+	@Column
 	private String token;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	private AppUser appUser;
-	@Column(name = "EXPIRES_DATE")
+	@Column
 	private LocalDateTime expiresDate;
 }

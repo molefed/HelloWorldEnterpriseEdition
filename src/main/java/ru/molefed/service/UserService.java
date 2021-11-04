@@ -10,6 +10,7 @@ import ru.molefed.db.entity.user.AppUser;
 import ru.molefed.db.repo.user.AppUserRepository;
 import ru.molefed.utils.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -56,5 +57,11 @@ public class UserService {
 	@Transactional
 	public void delete(long id) {
 		appUserRepository.deleteById(id);
+	}
+
+	@Transactional
+	public void updateLastLogin(String userName) {
+		LocalDateTime lastLogin = LocalDateTime.now();
+		appUserRepository.updateLastLogin(userName, lastLogin);
 	}
 }

@@ -2,7 +2,6 @@ package ru.molefed.db.entity.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ru.molefed.db.entity.AEntityFakeDeletedWithNameAndId;
 
@@ -12,25 +11,38 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = AppUser.TABLE/*,
-        uniqueConstraints = {
-                @UniqueConstraint(name = "AppUserNameUK", columnNames = AEntityWithNameAndId.NAME) }*/)
+@Table(name = "HWEE_USER")
 @NoArgsConstructor
 @Getter
 @Setter
 public class AppUser extends AEntityFakeDeletedWithNameAndId {
 
-	public static final String TABLE = "HWEE_USER";
-	public static final String LAST_LOGIN = "LAST_LOGIN";
-
-	@Column(name = "ENCRYTED_PASSWORD", length = 128, nullable = false)
+	@Column(nullable = false)
 	private String encrytedPassword;
-	@Column(name = AppUser.LAST_LOGIN)
+
+	@Column(nullable = false)
+	private String email;
+
+	@Column
+	private String firstName;
+
+	@Column
+	private String lastName;
+
+	@Column
+	private LocalDateTime birthday;
+
+	@Column
+	@Enumerated(EnumType.ORDINAL)
+	private Gender gender;
+
+	@Column
 	private LocalDateTime lastLogin;
-	@ManyToMany(cascade = CascadeType.ALL) // TODO: 30.04.2019 разобраться с каскадами
-	@JoinTable(name = UserRole.TABLE,
-			joinColumns = @JoinColumn(name = UserRole.USER_ID),
-			inverseJoinColumns = @JoinColumn(name = UserRole.ROLE_ID)
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "HWEE_USER_ROLE",
+			joinColumns = @JoinColumn(name = "USER_ID"),
+			inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
 	)
 	private Set<AppRole> roles = new HashSet<>();
 }

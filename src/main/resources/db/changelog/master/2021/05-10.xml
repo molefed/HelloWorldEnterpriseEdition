@@ -18,6 +18,7 @@
         <insert tableName="HWEE_USER">
             <column name="NAME" value="root"/>
             <column name="DELETED" value="false"/>
+            <column name="EMAIL" value="root@mysite.com"/>
             <column name="ENCRYTED_PASSWORD" value="$2a$10$Op4Qk3V3n1uX.EDWipmll.yVXZXyxqd16BY1O5iwOxv0rwrP2db8W"/>
         </insert>
 

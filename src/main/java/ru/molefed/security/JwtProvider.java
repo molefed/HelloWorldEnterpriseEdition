@@ -57,7 +57,7 @@ public class JwtProvider {
     }
 
     @Transactional
-    public TokenInfo generateRefreshToken(AppUser appUser) {
+    public TokenInfo generateAndSaveRefreshToken(AppUser appUser) {
         String compact = Jwts.builder()
                 .setExpiration(calcExpiresDate(refreshExpiresInMin))
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)

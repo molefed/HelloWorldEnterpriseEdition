@@ -11,6 +11,7 @@ import ru.molefed.security.annotate.CanManageUsers;
 import ru.molefed.security.annotate.PermitAuthenticated;
 import ru.molefed.service.UserService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -48,13 +49,13 @@ public class UserController {
 
 	@CanManageUsers
 	@PostMapping(value = "/save")
-	public AppUserDto save(@RequestBody AppUserDto userDto) {
+	public AppUserDto save(@RequestBody @Valid AppUserDto userDto) {
 		AppUser user = userService.save(appUserMapper.toDomain(userDto), userDto.getPassword());
 		return appUserMapper.toDto(user);
 	}
 
 	@CanManageUsers
-	@GetMapping("/delete/{id}")
+	@PostMapping("/delete/{id}")
 	public void delete(@PathVariable long id) {
 		userService.delete(id);
 	}
