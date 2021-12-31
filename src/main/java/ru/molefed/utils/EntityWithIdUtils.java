@@ -9,8 +9,9 @@ public class EntityWithIdUtils {
     }
 
     public static boolean equalsId(AEntityWithId obj1, AEntityWithId obj2) {
-        if (isEmptyId(obj1) || isEmptyId(obj2))
+        if (isEmptyId(obj1) || isEmptyId(obj2)) {
             return false;
+        }
 
         return obj1.getId().equals(obj2.getId());
     }

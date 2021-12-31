@@ -15,14 +15,11 @@ import java.time.LocalDate;
 @Setter
 public class Book extends AEntityFakeDeletedWithId {
 
-	@Column(nullable = false)
 	private String title;
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
 	@JoinColumn(name = "author_id")
 	private Author author;
-	@Column
 	private LocalDate date;
-	@Column
 	private Double price;
 	@Column(name = "CATALOG_TYPE")
 	@Enumerated(EnumType.ORDINAL)

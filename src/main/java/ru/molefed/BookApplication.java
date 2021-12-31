@@ -11,11 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class BookApplication extends SpringBootServletInitializer {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(BookApplication.class);
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(BookApplication.class, args);
     }

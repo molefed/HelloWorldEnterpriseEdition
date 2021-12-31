@@ -1,4 +1,4 @@
-package ru.molefed;
+package ru.molefed.configuration;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;

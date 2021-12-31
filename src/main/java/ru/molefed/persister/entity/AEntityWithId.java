@@ -15,7 +15,7 @@ public class AEntityWithId implements EntityWithId {
 	public static final String ID = "id";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //TODO переделать на сиквенс или UUID
 	@Column(name = AEntityWithId.ID)
 	protected Long id;
 

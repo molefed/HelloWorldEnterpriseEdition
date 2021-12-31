@@ -16,26 +16,13 @@ import java.util.Set;
 @Setter
 public class AppUser extends AEntityFakeDeletedWithNameAndId {
 
-	@Column(nullable = false)
 	private String encrytedPassword;
-
-	@Column(nullable = false)
 	private String email;
-
-	@Column
 	private String firstName;
-
-	@Column
 	private String lastName;
-
-	@Column
 	private LocalDateTime birthday;
-
-	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private Gender gender;
-
-	@Column
 	private LocalDateTime lastLogin;
 
 	@ManyToMany(fetch = FetchType.EAGER)

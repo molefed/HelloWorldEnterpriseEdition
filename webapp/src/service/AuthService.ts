@@ -6,6 +6,12 @@ function goToRootFolder() {
     window.location.href = '/';
 }
 
+export function goToRootAsAnonimus() {
+    setToken(undefined);
+    goToRootFolder();
+}
+
+
 export async function logout() {
     const token = getToken();
 
@@ -14,8 +20,7 @@ export async function logout() {
             token: token.token
         });
 
-        goToRootFolder();
-        setToken(undefined);
+        goToRootAsAnonimus();
     }
 }
 
@@ -35,11 +40,11 @@ export async function login(username: string, password: string) {
     }
 }
 
-export async function refreshToken(refreshToken: string): Promise<DTO.RefreshTokenResponseTO> {
+export async function requestRefreshToken(refreshToken: string): Promise<AxiosResponse> {
     const response: AxiosResponse = await axiosCreate().post<DTO.RefreshTokenRequestTO, AxiosResponse>(
         "/auth/refreshToken",
         {token: refreshToken}
     );
 
-    return response.data;
+    return response;
 }

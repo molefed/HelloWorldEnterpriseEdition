@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from "axios";
-import {getToken, refreshToken, setToken} from "../service/TokenFolderService";
+import {getToken, refreshToken} from "../service/TokenFolderService";
 import React, {Dispatch, useEffect, useState} from "react";
 import {Backdrop, CircularProgress} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
@@ -19,7 +19,6 @@ export function axiosCreate() {
         responseType: "json",
     });
 }
-
 
 const apiList = [api];
 
@@ -61,18 +60,20 @@ function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>
     asiosInst.interceptors.request.use(async function (config) {
         setVisibleBackdrop(true);
 
-        let token = getToken();
-        if (token) {
-            const nowTime = new Date().getTime();
-            if (token.refreshExpiresTime < nowTime) {
-                setToken(undefined);
-                window.location.reload();
-            } else if (token.expiresTime < nowTime) {
-                let refreshTokenResponseTO = await authService.refreshToken(token.refreshToken);
-                token = refreshToken(refreshTokenResponseTO);
-            }
+        if (!config.url || config.url.indexOf("/auth/") < 0) {
+            let token = getToken();
+            if (token) {
+                const nowTime = new Date().getTime();
+                if (token.refreshExpiresTime < nowTime) {
+                    authService.goToRootAsAnonimus();
+                } else if (token.expiresTime < nowTime) {
+                    let response = await authService.requestRefreshToken(token.refreshToken);
+                    let refreshTokenResponseTO: DTO.RefreshTokenResponseTO = response.data;
+                    token = refreshToken(refreshTokenResponseTO);
+                }
 
-            config.headers.Authorization = `Bearer ${token.token}`
+                config.headers.Authorization = `Bearer ${token.token}`
+            }
         }
 
         return config
@@ -90,11 +91,15 @@ function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>
         const response = error.response;
         if (response) {
             if (response.status !== 200) {
-                const data: DTO.ExceptionResponseTO = response.data;
-                if (data) {
-                    if (data.message) {
-                        setErrorOpen(true);
-                        setErrorString(data.message);
+                if (response.status === 401 && window.location.href.indexOf('/signin') < 0) {
+                    authService.goToRootAsAnonimus();
+                } else {
+                    const data: DTO.ExceptionResponseTO = response.data;
+                    if (data) {
+                        if (data.message) {
+                            setErrorOpen(true);
+                            setErrorString(data.message);
+                        }
                     }
                 }
             }

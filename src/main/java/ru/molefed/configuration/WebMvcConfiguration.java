@@ -1,4 +1,4 @@
-package ru.molefed;
+package ru.molefed.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

@@ -35,10 +35,11 @@ public class RefreshTokenService {
 	public RefreshToken getValidToken(String token) {
 		RefreshToken refreshToken = refreshTokenRepository.findById(token).orElse(null);
 		if (refreshToken != null) {
-			if (refreshToken.getExpiresDate().isBefore(LocalDateTime.now())) {
+			if (refreshToken.getExpiresDate().isAfter(LocalDateTime.now())) {
 				return refreshToken;
 			}
 		}
+
 		return null;
 	}
 

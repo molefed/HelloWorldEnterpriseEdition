@@ -15,7 +15,7 @@
                              foreignKeyName="FK_HWEE_REFRESH_TOKEN_USER"
                              references="HWEE_USER(ID)"/>
             </column>
-            <column name="EXPIRES_DATE" type="date"/>
+            <column name="EXPIRES_DATE" type="datetime"/>
         </createTable>
 
     </changeSet>
