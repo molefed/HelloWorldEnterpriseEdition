@@ -5,13 +5,13 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import {api} from '../utils/http'
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
+import * as userService from "../service/UserService";
 
 const useStylesUsersPage = makeStyles((theme) => ({
     root: {
@@ -28,11 +28,9 @@ export default function UsersPage() {
     const [users, setUsers] = useState<DTO.AppUserDto[]>([]);
     const [userForEdit, setUserForEdit] = useState<DTO.AppUserDto | null>(null);
 
-    const loadUser = (pattern: string) => {
-        api.post<DTO.SearchAppUserDTO, DTO.AppUserDto[]>("/users/search", {
-            pattern: pattern
-        } as DTO.SearchAppUserDTO)
-            .then(users => setUsers(users));
+    const loadUser = async (pattern: string) => {
+        let users = await userService.loadUser(pattern);
+        setUsers(users);
     }
 
     useEffect(function () {

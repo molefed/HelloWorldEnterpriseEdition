@@ -26,7 +26,12 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
 
 		String permissionStr = (String) permission;
 		if ("user".equals(targetType)) {
-			if ("read".equals(permissionStr) || "edit".equals(permissionStr)) {
+			boolean edit = "edit".equals(permissionStr);
+			if ("read".equals(permissionStr) || edit) {
+				if (targetId == null && edit) {
+					return true;
+				}
+
 				if (isCurrentUser(auth, targetId)) {
 					return true;
 				}

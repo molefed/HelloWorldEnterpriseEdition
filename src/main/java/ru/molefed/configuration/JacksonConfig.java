@@ -75,7 +75,12 @@ public class JacksonConfig {
         bean.addDeserializer(LocalDate.class, new JsonDeserializer<>() {
             @Override
             public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-                return LocalDate.parse(jsonParser.getValueAsString(), DateTimeFormatter.ISO_LOCAL_DATE);
+                String value = jsonParser.getValueAsString();
+                if (value.length() > 10) {
+                    value = value.substring(0, 10);
+                }
+
+                return LocalDate.parse(value, DateTimeFormatter.ISO_LOCAL_DATE);
             }
         });
 

@@ -1,11 +1,10 @@
 import * as React from 'react';
-import {Dispatch} from 'react';
+import {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -14,6 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import {Copyright} from "./Copyright";
+import {FormControl, FormLabel, Radio, RadioGroup} from "@material-ui/core";
+import * as authService from "../../service/AuthService";
+import * as userService from "../../service/UserService";
 
 const useStyles = makeStyles((theme: Theme) => ({
     topBox: {
@@ -38,36 +40,37 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 }));
 
-// async function loginUser(credentials: Credentials): Promise<UserToken | void> {
-//     return fetch('http://localhost:8085', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(credentials)
-//     })
-//         .then(data => /*data.json()*/ {
-//             return {token: 't123'}
-//         })
-//         .catch(reason => console.log(reason));
-// }
-
 export default function SignUp() {
     const classes = useStyles();
 
-    // const [username, setUserName] = useState("");
-    // const [password, setPassword] = useState("");
+    const [username, setUserName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordAgain, setPasswordAgain] = useState("");
+    const [email, setEmail] = useState("");
+    const [gender, setGender] = useState("MAIL");
+    const [birthday, setBirthday] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // const token: UserToken | void = await loginUser({
-        //     // username,
-        //     // password
-        // } as Credentials);
-        //
-        // if (token) {
-        //     setToken(token);
-        // }
+
+        if (password !== passwordAgain) {
+            console.log("again not equals")
+        } else {
+            let user: DTO.AppUserDto = {
+                name: username,
+                password: password,
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                gender: gender as DTO.Gender,
+                birthday: new Date(birthday)
+            } as DTO.AppUserDto;
+
+            await userService.saveUser(user);
+            await authService.login(username, password);
+        }
     }
 
     return (
@@ -86,6 +89,17 @@ export default function SignUp() {
                     onSubmit={handleSubmit}
                 >
                     <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                id="username"
+                                label="Login"
+                                name="username"
+                                autoFocus
+                                onChange={e => setUserName(e.target.value)}
+                            />
+                        </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 autoComplete="fname"
@@ -94,7 +108,7 @@ export default function SignUp() {
                                 fullWidth
                                 id="firstName"
                                 label="First Name"
-                                autoFocus
+                                onChange={e => setFirstName(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -105,6 +119,7 @@ export default function SignUp() {
                                 label="Last Name"
                                 name="lastName"
                                 autoComplete="lname"
+                                onChange={e => setLastName(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -115,6 +130,7 @@ export default function SignUp() {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
+                                onChange={e => setEmail(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -125,14 +141,43 @@ export default function SignUp() {
                                 label="Password"
                                 type="password"
                                 id="password"
-                                autoComplete="current-password"
+                                onChange={e => setPassword(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary"/>}
-                                label="I want to receive inspiration, marketing promotions and updates via email."
+                            <TextField
+                                required
+                                fullWidth
+                                name="passwordAgain"
+                                label="Password again"
+                                type="passwordAgain"
+                                id="passwordAgain"
+                                onChange={e => setPasswordAgain(e.target.value)}
                             />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                id="birthdate"
+                                label="Birthdate"
+                                name="birthdate"
+                                type="date"
+                                onChange={e => setBirthday(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Gender</FormLabel>
+                                <RadioGroup row aria-label="gender" name="row-radio-buttons-group"
+                                            defaultValue={gender}>
+                                    <FormControlLabel value="MAIL"
+                                                      control={<Radio onChange={e => setGender(e.target.value)}/>}
+                                                      label="Male"/>
+                                    <FormControlLabel value="FEMAIL"
+                                                      control={<Radio onChange={e => setGender(e.target.value)}/>}
+                                                      label="Female"/>
+                                </RadioGroup>
+                            </FormControl>
                         </Grid>
                     </Grid>
                     <Button type="submit" variant="contained" className={classes.buttonSubmit}>

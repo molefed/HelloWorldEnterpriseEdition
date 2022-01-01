@@ -48,7 +48,7 @@ public class UserController {
 		return appUserMapper.toDto(userService.get(principal.getName()));
 	}
 
-	@PreAuthorize("hasPermission(#userDto.name, 'user', 'edit')")
+	@PreAuthorize("hasPermission(#userDto.id, 'user', 'edit')")
 	@PostMapping(value = "/save")
 	public AppUserDto save(@RequestBody @Valid AppUserDto userDto) {
 		AppUser user = userService.save(appUserMapper.toDomain(userDto), userDto.getPassword());

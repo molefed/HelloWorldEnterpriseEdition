@@ -32,26 +32,38 @@ public abstract class AppUserMapper {
 	public abstract List<AppUserDto> toDtos(List<AppUser> users);
 
 	public AppUser toDomain(AppUserDto userDto) {
-		AppUser user = userDto.getId() == null ?
+		boolean newUser = userDto.getId() == null;
+
+		AppUser user = newUser ?
 				new AppUser() : appUserRepository.findById(userDto.getId()).orElseThrow();
-		user.setId(userDto.getId());
-		user.setName(userDto.getName());
 
-		new CollectionMerger<String, AppRole>() {
-			@Override
-			protected AppRole create(String roleName) {
-				AppRole role = appRoleRepository.findByName(roleName);
-				if (role == null) {
-					throw new IllegalArgumentException("Can't find role " + roleName);
+		if (newUser) {
+			user.setName(userDto.getName());
+			user.setEmail(userDto.getEmail());
+		}
+
+		user.setBirthday(userDto.getBirthday());
+		user.setFirstName(userDto.getFirstName());
+		user.setLastName(userDto.getLastName());
+		user.setGender(userDto.getGender());
+
+		if (!newUser) {
+			new CollectionMerger<String, AppRole>() {
+				@Override
+				protected AppRole create(String roleName) {
+					AppRole role = appRoleRepository.findByName(roleName);
+					if (role == null) {
+						throw new IllegalArgumentException("Can't find role " + roleName);
+					}
+					return role;
 				}
-				return role;
-			}
 
-			@Override
-			protected boolean equals(String roleName, AppRole appRole) {
-				return appRole.getName().equals(roleName);
-			}
-		}.merge(userDto.getRoles(), user.getRoles());
+				@Override
+				protected boolean equals(String roleName, AppRole appRole) {
+					return appRole.getName().equals(roleName);
+				}
+			}.merge(userDto.getRoles(), user.getRoles());
+		}
 
 		return user;
 	}
