@@ -21,7 +21,7 @@
             </column>
             <column name="FIRST_NAME" type="varchar(64)"/>
             <column name="LAST_NAME" type="varchar(64)"/>
-            <column name="BIRTHDAY" type="datetime"/>
+            <column name="BIRTHDAY" type="date"/>
             <column name="GENDER" type="tinyint"/>
             <column name="DELETED" type="boolean"/>
             <column name="LAST_LOGIN" type="datetime"/>

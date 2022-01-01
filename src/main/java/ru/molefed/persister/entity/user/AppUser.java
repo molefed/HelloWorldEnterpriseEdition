@@ -6,6 +6,7 @@ import lombok.Setter;
 import ru.molefed.persister.entity.AEntityFakeDeletedWithNameAndId;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
 	private String email;
 	private String firstName;
 	private String lastName;
-	private LocalDateTime birthday;
+	private LocalDate birthday;
 	@Enumerated(EnumType.ORDINAL)
 	private Gender gender;
 	private LocalDateTime lastLogin;

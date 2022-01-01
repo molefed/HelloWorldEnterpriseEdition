@@ -16,8 +16,6 @@ import ru.molefed.security.JwtBearerFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-@ComponentScan("ru.molefed.security")
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 

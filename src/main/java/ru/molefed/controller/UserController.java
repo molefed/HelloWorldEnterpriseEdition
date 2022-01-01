@@ -2,6 +2,7 @@ package ru.molefed.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.molefed.controller.dto.AppUserDto;
 import ru.molefed.controller.dto.SearchAppUserDTO;
@@ -35,19 +36,19 @@ public class UserController {
 		return appUserMapper.toDtos(userService.search(searchAppUserDTO.getPattern()));
 	}
 
-	@CanManageUsers
+	@PreAuthorize("hasPermission(#id, 'user', 'read')")
 	@GetMapping("/get/{id}")
 	public AppUserDto get(@PathVariable long id) {
 		return appUserMapper.toDto(userService.get(id));
 	}
 
-	@PermitAuthenticated
+	@PreAuthorize("hasPermission(#principal.name, 'user', 'read')")
 	@GetMapping("/current")
 	public AppUserDto current(Principal principal) {
 		return appUserMapper.toDto(userService.get(principal.getName()));
 	}
 
-	@CanManageUsers
+	@PreAuthorize("hasPermission(#userDto.name, 'user', 'edit')")
 	@PostMapping(value = "/save")
 	public AppUserDto save(@RequestBody @Valid AppUserDto userDto) {
 		AppUser user = userService.save(appUserMapper.toDomain(userDto), userDto.getPassword());
