@@ -22,6 +22,8 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
 			return false;
 		}
 
+		//TODO: проверить роль на админа
+
 		String permissionStr = (String) permission;
 		if ("user".equals(targetType)) {
 			if ("read".equals(permissionStr) || "edit".equals(permissionStr)) {
@@ -34,6 +36,7 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
 		return false;
 	}
 
+	@SuppressWarnings("RedundantIfStatement")
 	private boolean isCurrentUser(Authentication auth, Serializable targetId) {
 		if (targetId instanceof Number) {
 			if (((Number) targetId).longValue() == getUserId(auth)) {
