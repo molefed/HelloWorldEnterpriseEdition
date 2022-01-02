@@ -20,6 +20,6 @@ public interface NeedSendEmailRepository extends JpaRepository<NeedSendEmail, Lo
 	@Query("DELETE FROM NeedSendEmail WHERE id in :ids")
 	void deleteIn(@Param("ids") Set<Long> ids);
 
-	@Lock(LockModeType.PESSIMISTIC_READ)
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	List<NeedSendEmail> findByOrderByCreated(Pageable pageable);
 }
