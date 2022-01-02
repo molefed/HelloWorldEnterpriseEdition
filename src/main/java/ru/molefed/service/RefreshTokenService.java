@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.persister.entity.auth.RefreshToken;
 import ru.molefed.persister.entity.user.AppUser;
 import ru.molefed.persister.repository.auth.RefreshTokenRepository;
+import ru.molefed.utils.DateUtils;
 
 import java.time.LocalDateTime;
 
@@ -35,7 +36,7 @@ public class RefreshTokenService {
 	public RefreshToken getValidToken(String token) {
 		RefreshToken refreshToken = refreshTokenRepository.findById(token).orElse(null);
 		if (refreshToken != null) {
-			if (refreshToken.getExpiresDate().isAfter(LocalDateTime.now())) {
+			if (refreshToken.getExpiresDate().isAfter(DateUtils.now())) {
 				return refreshToken;
 			}
 		}
@@ -46,6 +47,6 @@ public class RefreshTokenService {
 	@Transactional
 	@Scheduled(cron = "0 0/30 * * * *") // every 30 min
 	public void deleteOldTokens() {
-		refreshTokenRepository.deleteOldTokens(LocalDateTime.now());
+		refreshTokenRepository.deleteOldTokens(DateUtils.now());
 	}
 }

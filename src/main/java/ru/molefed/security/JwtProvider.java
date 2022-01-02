@@ -12,9 +12,9 @@ import ru.molefed.persister.entity.user.AppRole;
 import ru.molefed.persister.entity.user.AppUser;
 import ru.molefed.property.JwtProperty;
 import ru.molefed.service.RefreshTokenService;
+import ru.molefed.utils.DateUtils;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -24,16 +24,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtProvider {
 
-	private static final ZoneId UTC = ZoneId.of("UTC");
-
 	private final RefreshTokenService refreshTokenService;
 	private final JwtProperty jwtProperty;
 
 	@SuppressWarnings("UseOfObsoleteDateTimeApi")
 	private Date calcExpiresDate(long expiresMin) {
-		return Date.from(LocalDateTime.now()
+		return Date.from(DateUtils.now()
 								 .plusMinutes(expiresMin)
-								 .atZone(UTC).toInstant());
+								 .atZone(DateUtils.UTC).toInstant());
 	}
 
 	public TokenInfo generateToken(AppUser appUser) {
@@ -56,7 +54,7 @@ public class JwtProvider {
 				.signWith(SignatureAlgorithm.HS256, jwtProperty.getSecret())
 				.compact();
 
-		refreshTokenService.saveNew(compact, appUser, LocalDateTime.now().plusMinutes(jwtProperty.getRefreshExpiresInMin()));
+		refreshTokenService.saveNew(compact, appUser, DateUtils.now().plusMinutes(jwtProperty.getRefreshExpiresInMin()));
 
 		return new TokenInfo(compact, jwtProperty.getRefreshExpiresInMin() * 60);
 	}

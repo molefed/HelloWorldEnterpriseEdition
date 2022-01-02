@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="afedoseev" id="EMAIL_INIT">
+        <createTable tableName="HWEE_NEED_SEND_EMAIL">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TITLE" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BODY" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EMAIL" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED" type="datetime"/>
+        </createTable>
+
+        <createTable tableName="HWEE_EMAIL_TEMPLATE">
+            <column name="ID" type="tinyint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TITLE" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BODY" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
