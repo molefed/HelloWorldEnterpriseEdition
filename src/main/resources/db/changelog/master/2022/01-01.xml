@@ -22,17 +22,28 @@
             <column name="CREATED" type="datetime"/>
         </createTable>
 
-        <createTable tableName="HWEE_EMAIL_TEMPLATE">
-            <column name="ID" type="tinyint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+        <createTable tableName="HWEE_USER_EMAIL_VALID_STORE">
+            <column name="ID" type="bigint">
+                <constraints primaryKey="true"
+                             nullable="false"
+                             foreignKeyName="FK_HWEE_USER_KEY_STORE_USER"
+                             references="HWEE_USER(ID)"/>
             </column>
-            <column name="TITLE" type="varchar(256)">
+            <column name="KEY_STR" type="varchar(1024)">
                 <constraints nullable="false"/>
             </column>
-            <column name="BODY" type="text">
+            <column name="CREATED" type="datetime">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addUniqueConstraint
+                tableName="HWEE_USER_EMAIL_VALID_STORE"
+                columnNames="KEY_STR"
+                constraintName="UQ_HWEE_USER_EMAIL_VALID_STORE_KEY"/>
+
+
     </changeSet>
+
 
 </databaseChangeLog>

@@ -25,6 +25,8 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
 	@Enumerated(EnumType.ORDINAL)
 	private Gender gender;
 	private LocalDateTime lastLogin;
+	private LocalDateTime created;
+	private boolean validEmail;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "HWEE_USER_ROLE",

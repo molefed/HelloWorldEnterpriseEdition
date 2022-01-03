@@ -25,6 +25,8 @@
             <column name="GENDER" type="tinyint"/>
             <column name="DELETED" type="boolean"/>
             <column name="LAST_LOGIN" type="datetime"/>
+            <column name="CREATED" type="datetime"/>
+            <column name="VALID_EMAIL" type="boolean"/>
         </createTable>
 
         <createTable tableName="HWEE_ROLE">

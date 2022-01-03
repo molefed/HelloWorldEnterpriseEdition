@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 @EnableScheduling
 public class SchedulingConfig implements SchedulingConfigurer {
 
-    private final Executor executor = Executors.newScheduledThreadPool(3);
+    private final Executor executor = Executors.newScheduledThreadPool(7);
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {

@@ -11,16 +11,32 @@ import org.springframework.stereotype.Service;
 public class ShedulerService {
 
 	private final NeedSendEmailService needSendEmailService;
+	private final RefreshTokenService refreshTokenService;
+	private final UserService userService;
 
 	@Scheduled(initialDelay = 1000 * 20, fixedDelay = 1000 * 3)
 	public void sendingEmail() {
-		log.debug("Start email sending");
+		start("sendingEmail", needSendEmailService::sending);
+	}
+
+	@Scheduled(cron = "0 0/30 * * * *") // every 30 min
+	public void deleteOldTokens() {
+		start("deleteOldTokens", refreshTokenService::deleteOldTokens);
+	}
+
+	@Scheduled(cron = "0 0/45 * * * *") // every 45 min
+	public void removeOldUserEmailValidStore() {
+		start("removeOldUserEmailValidStore", userService::removeOldUserEmailValidStore);
+	}
+
+	private void start(String taskName, Runnable runnable) {
+		log.debug("Start " + taskName);
 		try {
-			needSendEmailService.sending();
+			runnable.run();
 		} catch (Throwable e) {
 			log.error(e.getMessage(), e);
 		} finally {
-			log.debug("Stop email sending");
+			log.debug("Stop " + taskName);
 		}
 	}
 }

@@ -58,7 +58,9 @@ public class NeedSendEmailService {
 			}
 		}
 
-		needSendEmailRepository.deleteIn(forRemove);
+		if (!forRemove.isEmpty()) {
+			needSendEmailRepository.deleteIn(forRemove);
+		}
 	}
 
 	private void sendEmail(String email, String title, String body) {

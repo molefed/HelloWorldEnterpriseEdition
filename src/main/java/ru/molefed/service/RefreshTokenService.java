@@ -3,6 +3,7 @@ package ru.molefed.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.persister.entity.auth.RefreshToken;
 import ru.molefed.persister.entity.user.AppUser;
@@ -44,8 +45,7 @@ public class RefreshTokenService {
 		return null;
 	}
 
-	@Transactional
-	@Scheduled(cron = "0 0/30 * * * *") // every 30 min
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteOldTokens() {
 		refreshTokenRepository.deleteOldTokens(DateUtils.now());
 	}

@@ -15,12 +15,11 @@ import java.util.List;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long>, EntityFakeDeletedWithNameAndIdRepository<AppUser> {
 
-    @Modifying
-    @Query("UPDATE AppUser SET lastLogin=:lastLogin WHERE name = :userName")
-    void updateLastLogin(@Param("userName") String userName,
-                         @Param("lastLogin") LocalDateTime lastLogin);
+	@Modifying
+	@Query("UPDATE AppUser SET lastLogin=:lastLogin WHERE name = :userName")
+	void updateLastLogin(@Param("userName") String userName,
+						 @Param("lastLogin") LocalDateTime lastLogin);
 
-    @Query("select u from AppUser u join fetch u.roles WHERE u.name like :pattern")
-    List<AppUser> search(@Param("pattern") String pattern, Pageable pageable);
-
+	@Query("select u from AppUser u join fetch u.roles WHERE u.name like :pattern")
+	List<AppUser> search(@Param("pattern") String pattern, Pageable pageable);
 }
