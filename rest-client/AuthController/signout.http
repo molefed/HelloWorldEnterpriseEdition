@@ -1,0 +1,8 @@
+POST http://{{host}}/auth/signout
+Content-Type: application/json
+
+{
+  "token": "{{refreshToken}}"
+}
+
+###

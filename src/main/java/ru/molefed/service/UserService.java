@@ -46,7 +46,7 @@ public class UserService {
 	}
 
 	public AppUser get(String name) {
-		return appUserRepository.findByName(name);
+		return appUserRepository.findByName(name.toLowerCase());
 	}
 
 	public boolean isPasswordValid(AppUser user, String password) {
@@ -97,7 +97,7 @@ public class UserService {
 	@Transactional
 	public void updateLastLogin(String userName) {
 		LocalDateTime lastLogin = DateUtils.now();
-		appUserRepository.updateLastLogin(userName, lastLogin);
+		appUserRepository.updateLastLogin(userName.toLowerCase(), lastLogin);
 	}
 
 	@Transactional

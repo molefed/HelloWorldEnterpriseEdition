@@ -28,7 +28,7 @@ public class AppUser extends AEntityFakeDeletedWithNameAndId {
 	private LocalDateTime created;
 	private boolean validEmail;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "HWEE_USER_ROLE",
 			joinColumns = @JoinColumn(name = "USER_ID"),
 			inverseJoinColumns = @JoinColumn(name = "ROLE_ID")

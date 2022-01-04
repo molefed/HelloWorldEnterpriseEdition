@@ -1,0 +1,9 @@
+POST http://{{host}}/auth/refreshToken
+Content-Type: application/json
+
+{
+  "token": "{{refreshToken}}"
+}
+> {%client.global.set("token", response.body.token);%}
+
+###

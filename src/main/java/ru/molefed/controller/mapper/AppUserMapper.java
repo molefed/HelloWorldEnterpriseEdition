@@ -38,8 +38,8 @@ public abstract class AppUserMapper {
 				new AppUser() : appUserRepository.findById(userDto.getId()).orElseThrow();
 
 		if (newUser) {
-			user.setName(userDto.getName());
-			user.setEmail(userDto.getEmail());
+			user.setName(userDto.getName().toLowerCase());
+			user.setEmail(userDto.getEmail().toLowerCase());
 		}
 
 		user.setBirthday(userDto.getBirthday());

@@ -3,6 +3,7 @@ package ru.molefed.persister.repository.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.molefed.persister.entity.user.UserEmailValidStore;
 
@@ -16,5 +17,5 @@ public interface UserEmailValidStoreRepository extends JpaRepository<UserEmailVa
 	@Modifying
 	@Query("DELETE FROM UserEmailValidStore s WHERE s.created < :createdDateLess AND" +
 			" EXISTS (SELECT u.id FROM AppUser u WHERE u.id = s.id AND u.validEmail = true)")
-	void removeOld(LocalDateTime createdDateLess);
+	void removeOld(@Param(value = "createdDateLess") LocalDateTime createdDateLess);
 }
