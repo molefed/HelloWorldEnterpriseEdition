@@ -1,4 +1,4 @@
-POST http://{{host}}/auth/signout
+POST http://{{host}}/api/v1/auth/signout
 Content-Type: application/json
 
 {

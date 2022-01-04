@@ -3,7 +3,7 @@ package ru.molefed.persister.entity.book;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.molefed.persister.entity.AEntityFakeDeletedWithId;
+import ru.molefed.persister.entity.AEntityWithNameAndId;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,8 +13,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Book extends AEntityFakeDeletedWithId {
+public class Book extends AEntityWithNameAndId {
 
+	private boolean deleted;
 	private String title;
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
 	@JoinColumn(name = "author_id")

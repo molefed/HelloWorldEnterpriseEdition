@@ -3,7 +3,7 @@ package ru.molefed.persister.entity.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.molefed.persister.entity.AEntityFakeDeletedWithNameAndId;
+import ru.molefed.persister.entity.AEntityWithNameAndId;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,8 +15,9 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AppUser extends AEntityFakeDeletedWithNameAndId {
+public class AppUser extends AEntityWithNameAndId {
 
+	private boolean deleted;
 	private String encrytedPassword;
 	private String email;
 	private String firstName;

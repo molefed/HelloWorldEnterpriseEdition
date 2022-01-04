@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.httpBasic().disable()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and().authorizeRequests()
-				.antMatchers("/", "/auth/**").permitAll()
+				.antMatchers("/", "/api/v1/auth/**").permitAll()
 				.antMatchers("/userInfo").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 				.antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
 				.and().exceptionHandling().accessDeniedPage("/403");

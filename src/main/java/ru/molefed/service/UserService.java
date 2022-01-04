@@ -84,14 +84,16 @@ public class UserService {
 		userEmailValidStoreRepository.save(userEmailValidStore);
 
 		Map<String, String> emailParams = Map.of("user", user.getName(),
-												 "url", "http://localhost:9090/users/valid-email/" + key);
+												 "url", "http://localhost:9090/api/v1/users/valid-email/" + key);
 
 		needSendEmailService.save(user.getEmail(), EmailTemplate.VALID_EMAIL, emailParams);
 	}
 
 	@Transactional
 	public void delete(long id) {
-		appUserRepository.deleteById(id);
+		AppUser appUser = appUserRepository.findById(id).orElseThrow();
+		appUser.setDeleted(true);
+		appUserRepository.save(appUser);
 	}
 
 	@Transactional

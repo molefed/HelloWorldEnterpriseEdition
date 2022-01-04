@@ -16,7 +16,7 @@ public class TemplateService {
 
 	@SneakyThrows
 	public String getFilledTemplate(String templateName, Map<String, String> params) {
-		Template template = configuration.getTemplate(templateName);
+		Template template = configuration.getTemplate(templateName.toLowerCase());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(template, params);
 	}
 }

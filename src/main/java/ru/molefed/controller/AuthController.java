@@ -21,7 +21,7 @@ import ru.molefed.service.UserService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/auth", method = RequestMethod.POST)
+@RequestMapping(value = "/api/v1/auth", method = RequestMethod.POST)
 @RequiredArgsConstructor
 public class AuthController {
 

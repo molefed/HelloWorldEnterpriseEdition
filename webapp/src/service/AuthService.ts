@@ -16,7 +16,7 @@ export async function logout() {
     const token = getToken();
 
     if (token) {
-        await api.post<DTO.RefreshTokenRequestTO, void>("/auth/signout", {
+        await api.post<DTO.RefreshTokenRequestTO, void>("/api/v1/auth/signout", {
             token: token.token
         });
 
@@ -25,7 +25,7 @@ export async function logout() {
 }
 
 async function loginUser(credentials: DTO.SignInRequestTO): Promise<DTO.SignInResponseTO> {
-    return api.post<DTO.SignInRequestTO, DTO.SignInResponseTO>("/auth/generateToken", credentials);
+    return api.post<DTO.SignInRequestTO, DTO.SignInResponseTO>("/api/v1/auth/generateToken", credentials);
 }
 
 export async function login(username: string, password: string) {
@@ -42,7 +42,7 @@ export async function login(username: string, password: string) {
 
 export async function requestRefreshToken(refreshToken: string): Promise<AxiosResponse> {
     const response: AxiosResponse = await axiosCreate().post<DTO.RefreshTokenRequestTO, AxiosResponse>(
-        "/auth/refreshToken",
+        "/api/v1/auth/refreshToken",
         {token: refreshToken}
     );
 

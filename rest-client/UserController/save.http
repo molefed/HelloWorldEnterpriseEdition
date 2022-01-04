@@ -1,0 +1,14 @@
+POST http://{{host}}/api/v1/users/save
+Content-Type: application/json
+
+{
+  "name": "user1",
+  "password": "user1",
+  "email": "user1@mysite.com",
+  "firstName": "firstName1",
+  "lastName": "lastName",
+  "birthday": "2000-10-03",
+  "gender": 1
+}
+
+###

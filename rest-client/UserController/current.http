@@ -1,0 +1,4 @@
+GET http://{{host}}/api/v1/users/current
+Authorization: Bearer {{token}}
+
+###

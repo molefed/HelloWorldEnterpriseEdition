@@ -60,7 +60,7 @@ function tuneApi(asiosInst: AxiosInstance, setVisibleBackdrop: Dispatch<boolean>
     asiosInst.interceptors.request.use(async function (config) {
         setVisibleBackdrop(true);
 
-        if (!config.url || config.url.indexOf("/auth/") < 0) {
+        if (!config.url || config.url.indexOf("/api/v1/auth/") < 0) {
             let token = getToken();
             if (token) {
                 const nowTime = new Date().getTime();
