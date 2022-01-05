@@ -14,7 +14,7 @@ public class ShedulerService {
 	private final RefreshTokenService refreshTokenService;
 	private final UserService userService;
 
-	@Scheduled(initialDelay = 1000 * 20, fixedDelay = 1000 * 5)
+	@Scheduled(initialDelay = 1000 * 20, fixedDelay = 1000 * 60)
 	public void sendingEmail() {
 		start("sendingEmail", needSendEmailService::sending);
 	}

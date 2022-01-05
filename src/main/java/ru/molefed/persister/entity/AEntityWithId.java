@@ -12,11 +12,8 @@ import javax.persistence.*;
 @Setter
 public class AEntityWithId implements EntityWithId {
 
-	public static final String ID = "id";
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO) //TODO переделать на сиквенс или UUID
-	@Column(name = AEntityWithId.ID)
 	protected Long id;
 
 	@Override

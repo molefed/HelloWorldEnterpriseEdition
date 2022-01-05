@@ -16,7 +16,7 @@ public class TemplateService {
 
 	@SneakyThrows
 	public String getFilledTemplate(String templateName, Map<String, String> params) {
-		Template template = configuration.getTemplate(templateName.toLowerCase());
+		Template template = configuration.getTemplate(templateName.toLowerCase() + ".ftl");
 		return FreeMarkerTemplateUtils.processTemplateIntoString(template, params);
 	}
 }

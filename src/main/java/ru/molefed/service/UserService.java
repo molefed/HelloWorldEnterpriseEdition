@@ -55,6 +55,8 @@ public class UserService {
 
 	@Transactional
 	public AppUser save(AppUser user, String password) {
+		checkDuplicate(user);
+
 		boolean newUser = user.getId() == null;
 
 		if (newUser) {
@@ -65,23 +67,31 @@ public class UserService {
 			user.setEncrytedPassword(passwordEncoder.encode(password));
 		}
 
-		user = appUserRepository.save(user);
-
 		if (newUser) {
 			sendValidEmail(user);
 		}
 
-		return user;
+		return appUserRepository.save(user);
+	}
+
+	private void checkDuplicate(AppUser user) {
+		AppUser existUser = appUserRepository.findByNameIgnoreCaseOrEmailIgnoreCase(user.getName(), user.getEmail());
+
+		if (existUser != null) {
+			if (user.getId() == null || !user.getId().equals(existUser.getId())) {
+				throw new RuntimeException("User with the same name or email already exists");
+			}
+		}
 	}
 
 	private void sendValidEmail(AppUser user) {
-		String key = RandomStringUtils.random(1024, true, true);
+		String key = RandomStringUtils.random(512, true, true);
 
 		UserEmailValidStore userEmailValidStore = new UserEmailValidStore();
-		userEmailValidStore.setId(user.getId());
+		userEmailValidStore.setUser(user);
 		userEmailValidStore.setKey(key);
 		userEmailValidStore.setCreated(DateUtils.now());
-		userEmailValidStoreRepository.save(userEmailValidStore);
+		user.setUserEmailValidStore(userEmailValidStore);
 
 		Map<String, String> emailParams = Map.of("user", user.getName(),
 												 "url", "http://localhost:9090/api/v1/users/valid-email/" + key);
@@ -104,12 +114,12 @@ public class UserService {
 
 	@Transactional
 	public String validAndGetEmail(String key) {
-		UserEmailValidStore userEmailValidStore = userEmailValidStoreRepository.findByKey(key);
+		var userEmailValidStore = userEmailValidStoreRepository.findByKey(key);
 		if (userEmailValidStore == null) {
 			throw new RuntimeException("Email verification key not found");
 		}
 
-		AppUser appUser = appUserRepository.findById(userEmailValidStore.getId()).orElseThrow();
+		AppUser appUser = appUserRepository.findById(userEmailValidStore.getUser().getId()).orElseThrow();
 		if (appUser.isValidEmail()) {
 			throw new RuntimeException(appUser.getEmail() + " already validate");
 		}

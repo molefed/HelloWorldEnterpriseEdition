@@ -37,9 +37,10 @@ public abstract class AppUserMapper {
 		AppUser user = newUser ?
 				new AppUser() : appUserRepository.findById(userDto.getId()).orElseThrow();
 
+		user.setName(userDto.getName().trim());
+
 		if (newUser) {
-			user.setName(userDto.getName().toLowerCase());
-			user.setEmail(userDto.getEmail().toLowerCase());
+			user.setEmail(userDto.getEmail().trim());
 		}
 
 		user.setBirthday(userDto.getBirthday());
@@ -47,7 +48,8 @@ public abstract class AppUserMapper {
 		user.setLastName(userDto.getLastName());
 		user.setGender(userDto.getGender());
 
-		if (!newUser) {
+		// юзер должен иметь права админа
+		if (!newUser && userDto.getRoles() != null && !userDto.getRoles().isEmpty()) {
 			new CollectionMerger<String, AppRole>() {
 				@Override
 				protected AppRole create(String roleName) {

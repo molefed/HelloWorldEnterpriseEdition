@@ -35,4 +35,8 @@ public class AppUser extends AEntityWithNameAndId {
 			inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
 	)
 	private Set<AppRole> roles;
+
+	@OneToOne(cascade=CascadeType.PERSIST, mappedBy = "user", fetch = FetchType.LAZY)
+	private UserEmailValidStore userEmailValidStore;
+
 }
