@@ -62,6 +62,6 @@ public class UserController {
 
 	@GetMapping("/valid-email/{key}")
 	public String validEmail(@PathVariable String key) {
-		return userService.validAndGetEmail(key);
+		return userService.validEmailAndGetRedirectPage(key);
 	}
 }

@@ -13,6 +13,7 @@ import ru.molefed.persister.entity.user.AppUser;
 import ru.molefed.persister.entity.user.UserEmailValidStore;
 import ru.molefed.persister.repository.user.AppUserRepository;
 import ru.molefed.persister.repository.user.UserEmailValidStoreRepository;
+import ru.molefed.property.AppProperty;
 import ru.molefed.utils.DateUtils;
 
 import java.time.LocalDateTime;
@@ -28,6 +29,8 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final NeedSendEmailService needSendEmailService;
 	private final UserEmailValidStoreRepository userEmailValidStoreRepository;
+	private final TemplateService templateService;
+	private final AppProperty appProperty;
 
 	public List<AppUser> getAll(Integer page, Integer size) {
 		return appUserRepository.findByDeleted(false,
@@ -94,7 +97,9 @@ public class UserService {
 		user.setUserEmailValidStore(userEmailValidStore);
 
 		Map<String, String> emailParams = Map.of("user", user.getName(),
-												 "url", "http://localhost:9090/api/v1/users/valid-email/" + key);
+												 "url", appProperty.getUrl() +
+														 "/api/v1/users/valid-email/" +
+														 key);
 
 		needSendEmailService.save(user.getEmail(), EmailTemplate.VALID_EMAIL, emailParams);
 	}
@@ -113,13 +118,13 @@ public class UserService {
 	}
 
 	@Transactional
-	public String validAndGetEmail(String key) {
+	public String validEmailAndGetRedirectPage(String key) {
 		var userEmailValidStore = userEmailValidStoreRepository.findByKey(key);
 		if (userEmailValidStore == null) {
 			throw new RuntimeException("Email verification key not found");
 		}
 
-		AppUser appUser = appUserRepository.findById(userEmailValidStore.getUser().getId()).orElseThrow();
+		var appUser = appUserRepository.findById(userEmailValidStore.getUser().getId()).orElseThrow();
 		if (appUser.isValidEmail()) {
 			throw new RuntimeException(appUser.getEmail() + " already validate");
 		}
@@ -127,7 +132,9 @@ public class UserService {
 		appUser.setValidEmail(true);
 		appUserRepository.save(appUser);
 
-		return appUser.getEmail();
+		return templateService.getFilledTemplate("verified_email_page",
+												 Map.of("email", appUser.getEmail(),
+														"url", appProperty.getUrl()));
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
