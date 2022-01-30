@@ -5,6 +5,8 @@ import Layout from "./components/Layout";
 import {DashboardPage, InventoryPage, OrdersPage, UsersPage,} from "./pages";
 import SignIn from './components/login/SignIn';
 import SignUp from './components/login/SignUp';
+import Recovery from './components/login/Recovery';
+import SetupPasswordByKey from './components/login/SetupPasswordByKey';
 import {getToken} from './service/TokenFolderService';
 
 export default function App() {
@@ -16,6 +18,8 @@ export default function App() {
                 <Route path="/" exact render={() => <Redirect to={"/signin"}/>}/>
                 <Route exact path="/signin" component={() => <SignIn />}/>
                 <Route exact path="/signup" component={() => <SignUp />}/>
+                <Route exact path="/recovery" component={() => <Recovery />}/>
+                <Route exact path="/setup-password-by-key" component={() => <SetupPasswordByKey />}/>
             </Switch>
         );
     }

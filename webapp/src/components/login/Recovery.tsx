@@ -4,8 +4,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -14,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import {Copyright} from "./Copyright";
-import * as authService from '../../service/AuthService';
+import * as userService from "../../service/UserService";
 
 const useStyles = makeStyles((theme: Theme) => ({
     topBox: {
@@ -39,78 +37,58 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 }));
 
-export default function SignIn() {
+export default function Recovery() {
     const classes = useStyles();
 
-    const [username, setUserName] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        await authService.login(username, password);
+        await userService.recovery(email);
     }
 
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline/>
-            <Box className={classes.topBox}
-            >
+            <Box className={classes.topBox}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Recovery
                 </Typography>
                 <Box
                     component="form"
                     className={classes.formBox}
                     onSubmit={handleSubmit}
                 >
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        onChange={e => setUserName(e.target.value)}
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary"/>}
-                        label="Remember me"
-                    />
-                    <Button type="submit" variant="contained" className={classes.buttonSubmit}>
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="/recovery" variant="body2">
-                                Forgot password?
-                            </Link>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                id="email"
+                                label="Email Address"
+                                name="email"
+                                autoComplete="email"
+                                onChange={e => setEmail(e.target.value)}
+                            />
                         </Grid>
+                    </Grid>
+                    <Button type="submit" variant="contained" className={classes.buttonSubmit}>
+                        Recovery
+                    </Button>
+                    <Grid container /*justifyContent="flex-end"*/>
                         <Grid item>
-                            <Link href="/signup" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                            <Link href="/signin" variant="body2">
+                                Already have an account? Sign in
                             </Link>
                         </Grid>
                     </Grid>
                 </Box>
             </Box>
-            <Copyright sx={{mt: 8, mb: 4}}/>
+            <Copyright sx={{mt: 5}}/>
         </Container>
     );
 }

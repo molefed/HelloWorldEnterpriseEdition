@@ -37,6 +37,6 @@ public class AppUser extends AEntityWithNameAndId {
 	private Set<AppRole> roles;
 
 	@OneToOne(cascade=CascadeType.PERSIST, mappedBy = "user", fetch = FetchType.LAZY)
-	private UserEmailValidStore userEmailValidStore;
+	private UserKeyStore userKeyStore;
 
 }

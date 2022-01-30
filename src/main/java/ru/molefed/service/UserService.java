@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.molefed.persister.entity.user.AppUser;
-import ru.molefed.persister.entity.user.UserEmailValidStore;
+import ru.molefed.persister.entity.user.UserKeyStore;
+import ru.molefed.persister.entity.user.UserKeyStoreType;
 import ru.molefed.persister.repository.user.AppUserRepository;
-import ru.molefed.persister.repository.user.UserEmailValidStoreRepository;
+import ru.molefed.persister.repository.user.UserKeyStoreRepository;
 import ru.molefed.property.AppProperty;
 import ru.molefed.utils.DateUtils;
 
@@ -28,7 +29,7 @@ public class UserService {
 	private final AppUserRepository appUserRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final NeedSendEmailService needSendEmailService;
-	private final UserEmailValidStoreRepository userEmailValidStoreRepository;
+	private final UserKeyStoreRepository userKeyStoreRepository;
 	private final TemplateService templateService;
 	private final AppProperty appProperty;
 
@@ -67,7 +68,7 @@ public class UserService {
 		}
 
 		if (StringUtils.isNotBlank(password)) {
-			user.setEncrytedPassword(passwordEncoder.encode(password));
+			user.setEncrytedPassword(obtainEncrytedPassword(password));
 		}
 
 		if (newUser) {
@@ -75,6 +76,10 @@ public class UserService {
 		}
 
 		return appUserRepository.save(user);
+	}
+
+	private String obtainEncrytedPassword(String password) {
+		return passwordEncoder.encode(password);
 	}
 
 	private void checkDuplicate(AppUser user) {
@@ -87,19 +92,24 @@ public class UserService {
 		}
 	}
 
+	private UserKeyStore saveUserKeyStore(AppUser user, UserKeyStoreType type) {
+		UserKeyStore userKeyStore = new UserKeyStore();
+		userKeyStore.setUser(user);
+		userKeyStore.setKey(RandomStringUtils.random(128, true, true));
+		userKeyStore.setCreated(DateUtils.now());
+		userKeyStore.setType(type);
+		user.setUserKeyStore(userKeyStore);
+
+		return userKeyStoreRepository.save(userKeyStore);
+	}
+
 	private void sendValidEmail(AppUser user) {
-		String key = RandomStringUtils.random(512, true, true);
+		var userKeyStore = saveUserKeyStore(user, UserKeyStoreType.VALID_EMAIL);
 
-		UserEmailValidStore userEmailValidStore = new UserEmailValidStore();
-		userEmailValidStore.setUser(user);
-		userEmailValidStore.setKey(key);
-		userEmailValidStore.setCreated(DateUtils.now());
-		user.setUserEmailValidStore(userEmailValidStore);
-
-		Map<String, String> emailParams = Map.of("user", user.getName(),
-												 "url", appProperty.getUrl() +
-														 "/api/v1/users/valid-email/" +
-														 key);
+		var emailParams = Map.of("user", user.getName(),
+								 "url", appProperty.getUrl() +
+										 "/api/v1/users/valid-email/" +
+										 userKeyStore.getKey());
 
 		needSendEmailService.save(user.getEmail(), EmailTemplate.VALID_EMAIL, emailParams);
 	}
@@ -119,7 +129,7 @@ public class UserService {
 
 	@Transactional
 	public String validEmailAndGetRedirectPage(String key) {
-		var userEmailValidStore = userEmailValidStoreRepository.findByKey(key);
+		var userEmailValidStore = userKeyStoreRepository.findByKeyAndType(key, UserKeyStoreType.VALID_EMAIL);
 		if (userEmailValidStore == null) {
 			throw new RuntimeException("Email verification key not found");
 		}
@@ -139,6 +149,36 @@ public class UserService {
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void removeOldUserEmailValidStore() {
-		userEmailValidStoreRepository.removeOld(DateUtils.now().minusWeeks(1));
+		userKeyStoreRepository.removeOld(DateUtils.now().minusWeeks(1));
+	}
+
+	@Transactional
+	public void recovery(String email) {
+		AppUser user = appUserRepository.findByEmail(email);
+		if (user == null) {
+			throw new RuntimeException("User not found by email " + email);
+		}
+
+		var userKeyStore = saveUserKeyStore(user, UserKeyStoreType.ACCOUNT_RECOVERY);
+
+		Map<String, String> emailParams = Map.of("user", user.getName(),
+												 "url", appProperty.getUrl() +
+														 "/setup-password-by-key?key=" +
+														 userKeyStore.getKey());
+
+		needSendEmailService.save(user.getEmail(), EmailTemplate.RECOVERY, emailParams);
+	}
+
+	@Transactional
+	public AppUser setupPasswordByKey(String key, String password) {
+		UserKeyStore userKeyStore = userKeyStoreRepository.findByKeyAndType(key, UserKeyStoreType.ACCOUNT_RECOVERY);
+		if (userKeyStore == null) {
+			throw new RuntimeException("User not found by key " + key);
+		}
+
+		AppUser user = userKeyStore.getUser();
+		user.setEncrytedPassword(obtainEncrytedPassword(password));
+
+		return appUserRepository.save(user);
 	}
 }

@@ -26,4 +26,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long>, EntityW
 	List<AppUser> findByDeleted(boolean deleted, Pageable page);
 
 	AppUser findByNameIgnoreCaseOrEmailIgnoreCase(String name, String email);
+
+	AppUser findByEmail(String email);
+
 }

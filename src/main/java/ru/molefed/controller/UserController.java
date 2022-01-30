@@ -5,7 +5,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.molefed.controller.dto.AppUserDto;
+import ru.molefed.controller.dto.RecoveryTO;
 import ru.molefed.controller.dto.SearchAppUserDTO;
+import ru.molefed.controller.dto.SetupPasswordByKeyTO;
 import ru.molefed.controller.mapper.AppUserMapper;
 import ru.molefed.persister.entity.user.AppUser;
 import ru.molefed.security.annotate.CanManageUsers;
@@ -63,5 +65,16 @@ public class UserController {
 	@GetMapping("/valid-email/{key}")
 	public String validEmail(@PathVariable String key) {
 		return userService.validEmailAndGetRedirectPage(key);
+	}
+
+	@PostMapping("/recovery")
+	public void recovery(@RequestBody @Valid RecoveryTO recoveryTO) {
+		userService.recovery(recoveryTO.getEmail());
+	}
+
+	@PostMapping("/setup-password-by-key")
+	public AppUserDto setupPasswordByKey(@RequestBody @Valid SetupPasswordByKeyTO setupTO) {
+		AppUser user = userService.setupPasswordByKey(setupTO.getKey(), setupTO.getPassword());
+		return appUserMapper.toDto(user);
 	}
 }
